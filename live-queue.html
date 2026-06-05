@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CareFlow - Live Queue Monitor</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<style>
+/* Color Variables Setup */
+:root {
+    --bg-main: #f4f6f9;
+    --bg-card: #ffffff;
+    --text-primary: #111827;
+    --text-secondary: #4b5563;
+    --border-color: #e5e7eb;
+    --table-header-bg: #f8faf9;
+    --table-border: #f1f3f2;
+}
+
+/* Dark Mode Color Overrides */
+[data-theme="dark"] {
+    --bg-main: #0f172a;
+    --bg-card: lab(95.8% 0.06 -2.16);
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+    --border-color: #334155;
+    --table-header-bg: #1e293b;
+    --table-border: #334155;
+}
+
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+}
+
+body {
+    background: var(--bg-main);
+    color: var(--text-secondary);
+    display: flex;
+    min-height: 100vh;
+    transition: background 0.3s ease, color 0.3s ease;
+}
+
+/* Sidebar Styling */
+.sidebar {
+    width: 240px;
+    height: 100vh;
+    background: #045743;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex-shrink: 0;
+    position: sticky;
+    top: 0;
+}
+
+/* Remove Link Styles */
+.sidebar a {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+}
+
+/* Logo Section */
+.logo-section {
+    padding: 15px;
+    text-align: center;
+    border-bottom: 1px solid rgba(255,255,255,.08);
+}
+
+.logo-img {
+    width: 90px;
+    height: auto;
+    display: block;
+    margin: auto;
+}
+
+.tagline {
+    margin-top: 8px;
+    color: #bfd1cb;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: .5px;
+}
+
+/* Menu Layout */
+.menu {
+    flex: 1;
+    padding: 15px 10px;
+}
+
+.section-title {
+    color: #86a79f;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    margin: 10px;
+}
+
+.menu-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 12px;
+    margin: 5px 0;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: .3s;
+}
+
+.menu-item:hover {
+    background: rgba(255,255,255,.08);
+}
+
+.menu-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.menu-left i {
+    font-size: 18px;
+    width: 20px;
+    color: #c8d8d2;
+    transition: color .3s;
+}
+
+.menu-left span {
+    font-size: 15px;
+    color: #d7e2de;
+    transition: color .3s;
+}
+
+/* Active State Styles */
+.active {
+    background: rgba(255,255,255,.12);
+    position: relative;
+}
+
+.active .menu-left i,
+.active .menu-left span {
+    color: #ffffff;
+}
+
+.active::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 10px;
+    bottom: 10px;
+    width: 4px;
+    background: #18d4a1;
+    border-radius: 10px;
+}
+
+.badge {
+    background: #15b887;
+    color: white;
+    font-size: 10px;
+    padding: 3px 8px;
+    border-radius: 20px;
+    font-weight: 600;
+}
+
+/* User Profile Section */
+.user-section {
+    border-top: 1px solid rgba(255,255,255,.08);
+    padding: 12px;
+}
+
+.user {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.user-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.avatar {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background: #1fb087;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: 700;
+    border: 2px solid rgba(255,255,255,.2);
+    color: #fff;
+}
+
+.user-info h3 {
+    font-size: 14px;
+    margin-bottom: 2px;
+    color: #fff;
+}
+
+.user-info p {
+    color: #a9c0b8;
+    font-size: 11px;
+}
+
+.dots {
+    color: #78938c;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+/* Main Dashboard Grid Elements */
+.main-content {
+    flex-grow: 1;
+    padding: 10px;
+    overflow-y: auto;
+}
+
+.dashboard-wrapper {
+    max-width: 1050px;
+    margin: 0 auto;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+/* Integrated Header Navigation Flex Styles */
+.header-navigation {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.header-navigation h1 {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+/* Top Actions & Search Field Integration */
+.top-actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.search-box {
+    width: 380px;
+    background: var(--bg-card);
+    border: 1.5px solid var(--border-color);
+    border-radius: 12px;
+    padding: 10px 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.search-box i {
+    color: var(--text-secondary);
+}
+
+.search-box input {
+    width: 100%;
+    border: none;
+    outline: none;
+    font-size: 15px;
+    background: transparent;
+    color: var(--text-primary);
+}
+
+.icon-btn {
+    width: 42px;
+    height: 42px;
+    border: none;
+    border-radius: 10px;
+    background: var(--bg-card);
+    cursor: pointer;
+    font-size: 18px;
+    position: relative;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 4px hsla(0, 0%, 94%, 0.897);
+    transition: background 0.3s ease, color 0.3s ease;
+}
+
+.notification-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #ef4444;
+    position: absolute;
+    top: 11px;
+    right: 11px;
+}
+
+/* Token Status Top Ribbon Banner */
+.token-banner-card {
+    background: linear-gradient(135deg, #045743 0%, #097958 100%);
+    color: #fff;
+    border-radius: 14px;
+    padding: 20px;
+    display: grid;
+    grid-template-columns: 1fr 1.1fr 1fr;
+    align-items: center;
+    gap: 16px;
+    box-shadow: 0 4px 15px rgba(4, 87, 67, .08);
+}
+
+.banner-section {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.banner-section:not(:last-child) {
+    border-right: 1px solid rgba(255,255,255,.15);
+    padding-right: 12px;
+}
+
+.banner-section .label {
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+    color: rgba(255,255,255,.75);
+    font-weight: 600;
+}
+
+.banner-section .token-display {
+    font-size: 42px;
+    font-weight: 800;
+    letter-spacing: -1px;
+    line-height: 1;
+}
+
+.banner-section .subtext {
+    font-size: 13px;
+    color: rgba(255,255,255,.85);
+}
+
+.wait-time-badge {
+    background: rgba(255,255,255,.12);
+    border-radius: 8px;
+    padding: 6px 10px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    border: 1px solid rgba(255,255,255,.15);
+    width: fit-content;
+    margin-top: 4px;
+}
+
+.wait-time-value {
+    font-size: 18px;
+    font-weight: 800;
+}
+
+.wait-time-label {
+    font-size: 11px;
+    line-height: 1.1;
+    color: rgba(255,255,255,.8);
+}
+
+/* Middle Layout Structure Split Row */
+.dashboard-split-row {
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 14px;
+}
+
+.status-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+}
+
+.status-card {
+    background: var(--bg-card);
+    border-radius: 12px;
+    padding: 16px;
+    box-shadow: 0 2px 8px rgba(0,0,0,.01);
+    border: 1px solid var(--border-color);
+    border-top: 3px solid #cbd5e1;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.card-teal { border-top-color: #097958; }
+.card-orange { border-top-color: #f59e0b; }
+.card-blue { border-top-color: #3b82f6; }
+
+.card-icon-wrapper {
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    margin-bottom: 2px;
+}
+
+.card-teal .card-icon-wrapper { background-color: #e6f4f0; color: #097958; }
+.card-orange .card-icon-wrapper { background-color: #fef3c7; color: #d97706; }
+.card-blue .card-icon-wrapper { background-color: #eff6ff; color: #2563eb; }
+
+.status-card .meta-title {
+    font-size: 11px;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--text-secondary);
+}
+
+.status-card .main-value {
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--text-primary);
+}
+
+.status-card .status-subtext {
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.card-teal .status-subtext { color: #097958; }
+.card-orange .status-subtext { color: #d97706; }
+.card-blue .status-subtext { color: #2563eb; }
+
+/* Progress Meter Visualizer */
+.progress-panel {
+    background: var(--bg-card);
+    border-radius: 12px;
+    padding: 16px;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 2px 8px rgba(0,0,0,.01);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.progress-meta {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.progress-meta .current-serving {
+    color: var(--text-primary);
+    font-weight: 700;
+}
+
+.progress-track {
+    width: 100%;
+    height: 10px;
+    background-color: var(--table-border);
+    border-radius: 99px;
+    overflow: hidden;
+    margin-bottom: 10px;
+}
+
+.progress-fill {
+    width: 73%;
+    height: 100%;
+    background: #097958;
+    border-radius: 99px;
+}
+
+.progress-summary {
+    font-size: 13px;
+    color: var(--text-secondary);
+}
+
+/* Alert Toast Unit Bar */
+.alert-banner {
+    background-color: #fdf5e6;
+    border: 1px solid #faebd7;
+    border-radius: 10px;
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+[data-theme="dark"] .alert-banner {
+    background-color: #2c251a;
+    border-color: #443722;
+}
+
+.alert-icon {
+    font-size: 14px;
+    color: #8c6220;
+}
+
+.alert-body p {
+    font-size: 13px;
+    color: #8c6220;
+    line-height: 1.3;
+}
+
+[data-theme="dark"] .alert-body p,
+[data-theme="dark"] .alert-icon {
+    color: #ffd085;
+}
+
+/* Central Queue Grid Panel Table */
+.table-panel {
+    background: var(--bg-card);
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 2px 8px rgba(0,0,0,.01);
+    overflow: hidden;
+}
+
+.table-header-block {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--table-border);
+}
+
+.table-header-block h2 {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text-primary);
+}
+
+.live-indicator {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+
+.live-indicator::before {
+    content: '';
+    width: 6px;
+    height: 6px;
+    background-color: #22c55e;
+    border-radius: 50%;
+}
+
+.queue-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.queue-table th {
+    background-color: var(--table-header-bg);
+    color: var(--text-secondary);
+    font-size: 10px;
+    text-transform: uppercase;
+    letter-spacing: .5px;
+    font-weight: 700;
+    padding: 10px 20px;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.queue-table td {
+    padding: 10px 20px;
+    font-size: 13.5px;
+    color: var(--text-secondary);
+    border-bottom: 1px solid var(--table-border);
+    vertical-align: middle;
+}
+
+.col-token {
+    font-weight: 700;
+    color: #097958;
+}
+
+.col-name {
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.status-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 600;
+    background-color: var(--table-border);
+    color: var(--text-secondary);
+}
+
+.row-active {
+    background-color: #eaf6f1 !important;
+}
+
+[data-theme="dark"] .row-active {
+    background-color: #062d22 !important;
+}
+
+.row-active .status-badge {
+    background-color: transparent;
+    color: #097958;
+    padding: 0;
+}
+
+[data-theme="dark"] .row-active .status-badge {
+    color: #10b981;
+}
+
+.token-pill-static {
+    background: var(--table-border);
+    padding: 2px 6px;
+    border-radius: 4px;
+    color: var(--text-primary);
+    font-weight: 700;
+    font-size: 12px;
+}
+
+.row-user-target {
+    background-color: #fdf5e6 !important;
+}
+
+[data-theme="dark"] .row-user-target {
+    background-color: #231c11 !important;
+}
+
+.row-user-target .col-token {
+    color: #8c6220;
+}
+
+[data-theme="dark"] .row-user-target .col-token {
+    color: #ffd085;
+}
+
+.row-user-target .status-badge {
+    background-color: transparent;
+    color: #8c6220;
+    padding: 0;
+    font-weight: 700;
+}
+
+[data-theme="dark"] .row-user-target .status-badge {
+    color: #ffd085;
+}
+
+/* Responsiveness Media Queries */
+@media (max-width: 900px) {
+    body {
+        flex-direction: column;
+    }
+    .sidebar {
+        width: 100%;
+        height: auto;
+        padding: 16px;
+        position: relative;
+    }
+    .logo-section {
+        margin-bottom: 16px;
+        flex-direction: row;
+        gap: 12px;
+        text-align: left;
+        padding: 0;
+        border-bottom: none;
+    }
+    .user-section {
+        margin-top: 16px;
+        border-top: 1px solid rgba(255,255,255,.08);
+    }
+}
+
+@media (max-width: 768px) {
+    .search-box {
+        width: 100%;
+    }
+    .token-banner-card {
+        grid-template-columns: 1fr;
+        gap: 14px;
+    }
+    .banner-section:not(:last-child) {
+        border-right: none;
+        border-bottom: 1px solid rgba(255,255,255,.15);
+        padding-bottom: 10px;
+    }
+    .dashboard-split-row {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+</head>
+<body>
+
+<aside class="sidebar">
+    <div>
+        <div class="logo-section">
+            <img src="logo.jpeg" alt="CareFlow Logo" class="logo-img">
+            <div class="tagline">Smart OPD Booking System</div>
+        </div>
+
+        <div class="menu">
+            <div class="section-title">MAIN</div>
+
+            <a href="dashboard.html">
+                <div class="menu-item">
+                    <div class="menu-left">
+                        <i class="fa-solid fa-table-cells-large"></i>
+                        <span>Dashboard</span>
+                    </div>
+                </div>
+            </a>
+
+            <a href="live-queue.html">
+                <div class="menu-item active">
+                    <div class="menu-left">
+                        <i class="fa-solid fa-list-ol"></i>
+                        <span>Live Queue</span>
+                    </div>
+                    <div class="badge">3 Ahead</div>
+                </div>
+            </a>
+
+            <a href="book-appointment.html">
+                <div class="menu-item">
+                    <div class="menu-left">
+                        <i class="fa-regular fa-calendar-plus"></i>
+                        <span>Book Appointment</span>
+                    </div>
+                </div>
+            </a>
+
+            <a href="my-bookings.html">
+                <div class="menu-item">
+                    <div class="menu-left">
+                        <i class="fa-regular fa-calendar-days"></i>
+                        <span>My Bookings</span>
+                    </div>
+                </div>
+            </a>
+
+            <div class="section-title">ACCOUNT</div>
+
+            <a href="profile.html">
+                <div class="menu-item">
+                    <div class="menu-left">
+                        <i class="fa-regular fa-user"></i>
+                        <span>Profile</span>
+                    </div>
+                </div>
+            </a>
+
+            <a href="notifications.html">
+                <div class="menu-item">
+                    <div class="menu-left">
+                        <i class="fa-regular fa-bell"></i>
+                        <span>Notifications</span>
+                    </div>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <div class="user-section">
+        <div class="user">
+            <div class="user-left">
+                <div class="avatar">ST</div>
+                <div class="user-info">
+                    <h3>Sushil Thapa</h3>
+                    <p>+977-9812345678</p>
+                </div>
+            </div>
+            <div class="dots">
+                <i class="fa-solid fa-ellipsis-vertical"></i>
+            </div>
+        </div>
+    </div>
+</aside>
+
+<main class="main-content">
+    <div class="dashboard-wrapper">
+        <header class="header-navigation">
+            <h1>Live Queue Monitor</h1>
+            <div class="top-actions">
+                <div class="search-box">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" placeholder="Search appointments, doctors...">
+                </div>
+                
+                <!-- Added Dark/Light Mode Switcher Action Button Element -->
+                <button class="icon-btn" id="theme-toggle-btn" title="Toggle Light/Dark Theme">
+                    <i class="fa-solid fa-moon"></i>
+                </button>
+
+                <button class="icon-btn">
+                    <i class="fa-regular fa-bell"></i>
+                    <span class="notification-dot"></span>
+                </button>
+                <button class="icon-btn">
+                    <i class="fa-regular fa-circle-question"></i>
+                </button>
+            </div>
+        </header>
+
+        <section class="token-banner-card">
+            <div class="banner-section">
+                <span class="label">Your Token</span>
+                <div class="token-display">A-47</div>
+                <span class="subtext">General OPD</span>
+            </div>
+            <div class="banner-section">
+                <span class="label">Physician Assignment</span>
+                <div class="token-display" style="font-size:18px; font-weight:700; margin:4px 0;">Dr. Ramesh KC</div>
+                <span class="subtext">MBBS, MD &bull; Room 3</span>
+            </div>
+            <div class="banner-section">
+                <span class="label">Now Serving</span>
+                <div class="token-display" style="font-size:30px; color:#a7f3d0;">A-44</div>
+                <div class="wait-time-badge">
+                    <span class="wait-time-value">~30</span>
+                    <span class="wait-time-label">min wait &bull; <b>11:12 AM</b></span>
+                </div>
+            </div>
+        </section>
+
+        <div class="dashboard-split-row">
+            <section class="status-grid">
+                <div class="status-card card-teal">
+                    <div class="card-icon-wrapper"><i class="fa-solid fa-users"></i></div>
+                    <span class="meta-title">In Queue</span>
+                    <div class="main-value">16</div>
+                    <span class="status-subtext">Active tokens</span>
+                </div>
+                <div class="status-card card-orange">
+                    <div class="card-icon-wrapper"><i class="fa-regular fa-clock"></i></div>
+                    <span class="meta-title">Avg Consult</span>
+                    <div class="main-value">8 min</div>
+                    <span class="status-subtext">Per patient</span>
+                </div>
+                <div class="status-card card-blue">
+                    <div class="card-icon-wrapper"><i class="fa-solid fa-check"></i></div>
+                    <span class="meta-title">Completed</span>
+                    <div class="main-value">43</div>
+                    <span class="status-subtext">Tokens served</span>
+                </div>
+            </section>
+
+            <section class="progress-panel">
+                <div class="progress-meta">
+                    <span>A-1 &bull; Start</span>
+                    <span class="current-serving">A-44 Serving Now</span>
+                    <span>A-60 &bull; End</span>
+                </div>
+                <div class="progress-track">
+                    <div class="progress-fill"></div>
+                </div>
+                <div class="progress-summary">You are token <strong style="color:#097958;">A-47</strong> &mdash; 3 tokens ahead.</div>
+            </section>
+        </div>
+
+        <div class="alert-banner">
+            <div class="alert-icon"><i class="fa-regular fa-comment-dots"></i></div>
+            <div class="alert-body">
+                <p><strong>SMS Alerts Enabled:</strong> You'll receive an SMS 5 tokens before your turn. Stay within hospital premises.</p>
+            </div>
+        </div>
+
+        <section class="table-panel">
+            <div class="table-header-block">
+                <h2>Full Queue Sequence Records</h2>
+                <div class="live-indicator">Updating live</div>
+            </div>
+            <table class="queue-table">
+                <thead>
+                    <tr>
+                        <th style="width:15%;">Token</th>
+                        <th style="width:45%;">Patient Name</th>
+                        <th style="width:20%;">Est. Time</th>
+                        <th style="width:20%;">Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="row-active">
+                        <td class="col-token">A-44</td>
+                        <td class="col-name">Patient (Now Serving)</td>
+                        <td>10:42 AM</td>
+                        <td><span class="status-badge">Active</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="token-pill-static">A-45</span></td>
+                        <td class="col-name" style="color:#718096; font-weight:400;">Patient</td>
+                        <td>10:52 AM</td>
+                        <td><span class="status-badge">Waiting</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="token-pill-static">A-46</span></td>
+                        <td class="col-name" style="color:#718096; font-weight:400;">Patient</td>
+                        <td>11:02 AM</td>
+                        <td><span class="status-badge">Waiting</span></td>
+                    </tr>
+                    <tr class="row-user-target">
+                        <td class="col-token">A-47</td>
+                        <td class="col-name">Sushil Thapa (You)</td>
+                        <td>11:12 AM</td>
+                        <td><span class="status-badge">Your Turn Soon</span></td>
+                    </tr>
+                    <tr>
+                        <td><span class="token-pill-static">A-48</span></td>
+                        <td class="col-name" style="color:#718096; font-weight:400;">Patient</td>
+                        <td>11:22 AM</td>
+                        <td><span class="status-badge">Waiting</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </section>
+    </div>
+</main>
+
+<!-- Added Theme Switching Engine Script Block -->
+<script>
+    const themeBtn = document.getElementById('theme-toggle-btn');
+    const themeIcon = themeBtn.querySelector('i');
+
+    // Retrieve active theme setting state from localStorage cache memory
+    const cachedTheme = localStorage.getItem('careflow-theme') || 'light';
+    
+    // Apply default loaded visual state
+    document.documentElement.setAttribute('data-theme', cachedTheme);
+    updateToggleIcon(cachedTheme);
+
+    themeBtn.addEventListener('click', () => {
+        const activeTheme = document.documentElement.getAttribute('data-theme');
+        const targetTheme = activeTheme === 'dark' ? 'light' : 'dark';
+        
+        document.documentElement.setAttribute('data-theme', targetTheme);
+        localStorage.setItem('careflow-theme', targetTheme);
+        updateToggleIcon(targetTheme);
+    });
+
+    function updateToggleIcon(theme) {
+        if (theme === 'dark') {
+            themeIcon.className = 'fa-solid fa-sun';
+        } else {
+            themeIcon.className = 'fa-solid fa-moon';
+        }
+    }
+</script>
+</body>
+</html>

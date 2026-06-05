@@ -1,0 +1,1112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CareFlow - Unified Dashboard</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+<style>
+    /* ==========================================================================
+       THEME SYSTEM VARIABLES
+       ========================================================================== */
+    :root {
+        --bg-app: #f4f6f5;
+        --bg-card: #ffffff;
+        --text-main: #111827;
+        --text-muted: #6b7280;
+        --border-color: #e5e7eb;
+        --border-inner: #f3f4f6;
+        --bg-btn-secondary: #eff6ff;
+        --text-btn-secondary: #2563eb;
+        
+        /* Emerald Brand Accents stay rich in both modes */
+        --brand-primary: #045743;
+        --brand-gradient-end: #15946e;
+        --brand-light-bg: #e6f4f0;
+        --brand-text-light: #065f46;
+    }
+
+    [data-theme="dark"] {
+        --bg-app: #0f172a;
+        --bg-card: #1e293b;
+        --text-main: hwb(240 4% 96% / 0.895);
+        --text-muted: #94a3b8;
+        --border-color: #334155;
+        --border-inner: #1e293b;
+        --bg-btn-secondary: #1e293b;
+        --text-btn-secondary: #38bdf8;
+        
+        /* Adjusting subtle alerts and tags for readability in dark mode */
+        --brand-light-bg: rgba(21, 184, 135, 0.15);
+        --brand-text-light: #34d399;
+    }
+
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+    }
+
+    body {
+        background: var(--bg-app);
+        display: flex;
+        min-height: 100vh;
+        overflow-x: hidden;
+        transition: background 0.3s ease;
+    }
+
+    /* LAYOUT STRUCTURE */
+    .app-container {
+        display: flex;
+        width: 100%;
+    }
+
+    /* SIDEBAR COMPONENT */
+    .sidebar {
+        width: 240px;
+        height: 100vh;
+        background: var(--brand-primary);
+        color: white;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        position: fixed;
+        left: 0;
+        top: 0;
+        z-index: 100;
+    }
+
+    /* Remove link style */
+    .sidebar a {
+        text-decoration: none;
+        color: inherit;
+        display: block;
+    }
+
+    /* Logo Section */
+    .logo-section {
+        padding: 15px;
+        text-align: center;
+        border-bottom: 1px solid rgba(255,255,255,.08);
+    }
+
+    .logo-img {
+        width: 90px;
+        height: auto;
+        display: block;
+        margin: auto;
+    }
+
+    .tagline {
+        margin-top: 8px;
+        color: #bfd1cb;
+        font-size: 11px;
+        font-weight: 500;
+        letter-spacing: .5px;
+    }
+
+    /* Menu */
+    .menu {
+        flex: 1;
+        padding: 15px 10px;
+    }
+
+    .section-title {
+        color: #86a79f;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 1px;
+        margin: 10px;
+    }
+
+    .menu-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 10px 12px;
+        margin: 5px 0;
+        border-radius: 12px;
+        cursor: pointer;
+        transition: .3s;
+    }
+
+    .menu-item:hover {
+        background: rgba(255,255,255,.08);
+    }
+
+    .menu-left {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .menu-left i {
+        font-size: 18px;
+        width: 20px;
+        color: #c8d8d2;
+    }
+
+    .menu-left span {
+        font-size: 15px;
+        color: #d7e2de;
+    }
+
+    .active {
+        background: rgba(255,255,255,.15);
+        position: relative;
+    }
+
+    .active::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 10px;
+        bottom: 10px;
+        width: 4px;
+        background: #18d4a1;
+        border-radius: 10px;
+    }
+
+    .badge {
+        background: #15b887;
+        color: white;
+        font-size: 10px;
+        padding: 3px 8px;
+        border-radius: 20px;
+        font-weight: 600;
+    }
+
+    /* User Section */
+    .user-section {
+        border-top: 1px solid rgba(255,255,255,.08);
+        padding: 12px;
+    }
+
+    .user {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .user-left {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .avatar {
+        width: 45px;
+        height: 45px;
+        border-radius: 50%;
+        background: #1fb087;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+        font-weight: 700;
+        border: 2px solid rgba(255,255,255,.2);
+        color: white;
+    }
+
+    .user-info h3 {
+        font-size: 14px;
+        margin-bottom: 2px;
+        color: white;
+    }
+
+    .user-info p {
+        color: #a9c0b8;
+        font-size: 11px;
+    }
+
+    .dots {
+        color: #78938c;
+        font-size: 16px;
+        cursor: pointer;
+    }
+
+    /* MAIN CONTENT CONTAINER */
+    .main-content {
+        flex: 1;
+        margin-left: 240px;
+        padding: 10px;
+        display: flex;
+        justify-content: center;
+    }
+
+    .dashboard-wrapper {
+        width: 100%;
+        max-width: 1200px;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    /* Top Bar */
+    .topbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .topbar h1 {
+        font-size: 32px;
+        font-weight: 700;
+        color: var(--text-main);
+    }
+
+    .top-actions {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .search-box {
+        width: 380px;
+        background: var(--bg-card);
+        border: 1.5px solid var(--border-color);
+        border-radius: 12px;
+        padding: 10px 14px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        transition: background 0.3s ease, border-color 0.3s ease;
+    }
+
+    .search-box i {
+        color: var(--text-muted);
+    }
+
+    .search-box input {
+        width: 100%;
+        border: none;
+        outline: none;
+        font-size: 15px;
+        background: transparent;
+        color: var(--text-main);
+    }
+
+    .search-box input::placeholder {
+        color: var(--text-muted);
+    }
+
+    .icon-btn {
+    width: 42px;
+    height: 42px;
+    border: none;
+    border-radius: 10px;
+    background: var(--bg-card);
+    cursor: pointer;
+    font-size: 18px;
+    position: relative;
+    color: var(--text-secondary);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+    transition: background 0.3s ease, color 0.3s ease;
+}
+
+    .icon-btn:hover {
+        color: var(--text-main);
+        border-color: var(--text-muted);
+    }
+
+    .notification-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: #ef4444;
+        position: absolute;
+        top: 11px;
+        right: 11px;
+    }
+
+    /* Theme Toggle Specific Icons Toggle Logic */
+    #theme-toggle .fa-sun {
+        display: none;
+        color: hsl(40, 16%, 93%);
+    }
+    [data-theme="dark"] #theme-toggle .fa-moon {
+        display: none;
+    }
+    [data-theme="dark"] #theme-toggle .fa-sun {
+        display: block;
+    }
+
+    /* Greeting Banner */
+    .welcome-hero {
+        background: linear-gradient(135deg, var(--brand-primary), var(--brand-gradient-end));
+        border-radius: 20px;
+        padding: 24px 30px;
+        color: white;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .welcome-hero::after {
+        content: "";
+        position: absolute;
+        width: 250px;
+        height: 250px;
+        background: rgba(255, 255, 255, 0.03);
+        border-radius: 50%;
+        right: -50px;
+        top: -70px;
+        pointer-events: none;
+    }
+
+    .hero-text-block small {
+        font-size: 14px;
+        color: #d1fae5;
+        opacity: 0.9;
+    }
+
+    .hero-text-block h2 {
+        font-size: 28px;
+        font-weight: 800;
+        margin: 2px 0 6px 0;
+    }
+
+    .hero-text-block p {
+        font-size: 15px;
+        color: #e6fdf4;
+    }
+
+    .hero-buttons-block {
+        display: flex;
+        gap: 12px;
+        z-index: 2;
+    }
+
+    .track-btn {
+        background: white;
+        color: #045743;
+        border: none;
+        padding: 12px 20px;
+        border-radius: 10px;
+        font-size: 15px;
+        font-weight: 700;
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .new-btn {
+        background: rgba(255, 255, 255, 0.15);
+        color: white;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        padding: 12px 20px;
+        border-radius: 10px;
+        font-size: 15px;
+        font-weight: 600;
+        cursor: pointer;
+    }
+
+    /* Main Grid Structure */
+    .main-grid {
+        display: grid;
+        grid-template-columns: 1.25fr 1fr;
+        gap: 20px;
+    }
+
+    .left-column, .right-column {
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+    }
+
+    .card {
+        background: var(--bg-card);
+        border-radius: 16px;
+        padding: 20px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.02);
+        border: 1px solid var(--border-inner);
+        transition: background 0.3s ease, border-color 0.3s ease;
+    }
+
+    .card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 16px;
+    }
+
+    .card-header h2 {
+        font-size: 18px;
+        font-weight: 700;
+        color: var(--text-main);
+    }
+
+    .see-all {
+        color: #0d9488;
+        text-decoration: none;
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+    /* Department Tags */
+    .departments-list {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+    }
+
+    .dept-btn {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 16px;
+        border-radius: 30px;
+        border: 1.5px solid var(--border-color);
+        background: var(--bg-card);
+        color: var(--text-muted);
+        font-size: 14px;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s ease, background 0.3s ease;
+    }
+
+    .dept-btn.active {
+        border-color: var(--brand-primary);
+        background: var(--brand-light-bg);
+        color: var(--brand-text-light);
+        font-weight: 600;
+    }
+
+    /* Doctor Component */
+    .doctor-inner-card {
+        border: 1px solid var(--border-color);
+        border-radius: 14px;
+        padding: 16px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .doc-info-block {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+    }
+
+    .doc-avatar {
+        width: 52px;
+        height: 52px;
+        background: #f59e0b;
+        color: #111827;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 800;
+        font-size: 18px;
+    }
+
+    .doc-text h3 {
+        font-size: 16px;
+        font-weight: 700;
+        color: var(--text-main);
+    }
+
+    .doc-text p {
+        font-size: 13px;
+        color: var(--text-muted);
+        margin-bottom: 6px;
+    }
+
+    .doc-meta-tags {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .break-badge {
+        background: #fef3c7;
+        color: #92400e;
+        padding: 1px 8px;
+        border-radius: 4px;
+        font-size: 11px;
+        font-weight: 600;
+    }
+
+    .rating {
+        display: flex;
+        align-items: center;
+        gap: 3px;
+        font-size: 13px;
+        font-weight: 700;
+        color: var(--text-main);
+    }
+
+    .rating i {
+        color: #f59e0b;
+    }
+
+    .price {
+        font-size: 13px;
+        color: var(--text-muted);
+        font-weight: 500;
+    }
+
+    .doc-action-block {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 6px;
+    }
+
+    .book-now-btn {
+        background: #008f6b;
+        color: white;
+        border: none;
+        padding: 8px 18px;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 700;
+        cursor: pointer;
+    }
+
+    .view-profile-btn {
+        background: var(--bg-btn-secondary);
+        color: var(--text-btn-secondary);
+        border: none;
+        padding: 6px 14px;
+        border-radius: 8px;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.3s ease, color 0.3s ease;
+    }
+
+    .slots-left {
+        font-size: 11px;
+        color: var(--text-muted);
+    }
+
+    /* Token Status Accent Block */
+    .token-hero-banner {
+        background: linear-gradient(135deg, #034f3d, #118664);
+        border-radius: 18px;
+        padding: 22px;
+        color: white;
+    }
+
+    .hero-label {
+        font-size: 11px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        opacity: 0.8;
+        font-weight: 600;
+    }
+
+    .hero-token-id {
+        font-size: 46px;
+        font-weight: 900;
+        line-height: 1.1;
+        margin: 2px 0;
+    }
+
+    .hero-doc-details {
+        font-size: 14px;
+        opacity: 0.9;
+        font-weight: 500;
+        margin-bottom: 18px;
+    }
+
+    .hero-metrics-row {
+        display: flex;
+        gap: 30px;
+        border-top: 1px solid rgba(255, 255, 255, 0.15);
+        padding-top: 12px;
+    }
+
+    .metric-box h4 {
+        font-size: 20px;
+        font-weight: 800;
+    }
+
+    .metric-box p {
+        font-size: 11px;
+        opacity: 0.7;
+        font-weight: 600;
+    }
+
+    /* Queue Progress Lines */
+    .tracker-card {
+        background: var(--bg-card);
+        border-radius: 14px;
+        padding: 16px;
+        border: 1px solid var(--border-inner);
+        transition: background 0.3s ease;
+    }
+
+    .tracker-timeline-labels {
+        display: flex;
+        justify-content: space-between;
+        font-size: 12px;
+        color: var(--text-muted);
+        font-weight: 500;
+        margin-bottom: 8px;
+    }
+
+    .tracker-timeline-labels .highlight-user {
+        color: var(--text-main);
+        font-weight: 700;
+    }
+
+    .tracker-bar-bg {
+        height: 8px;
+        background: var(--border-color);
+        border-radius: 10px;
+        overflow: hidden;
+        margin-bottom: 8px;
+    }
+
+    .tracker-bar-fill {
+        height: 100%;
+        width: 73%;
+        background: #008f6b;
+        border-radius: 10px;
+    }
+
+    .tracker-footer {
+        font-size: 12px;
+        color: var(--text-muted);
+    }
+
+    /* Alert Banner Layout */
+    .sms-alert-banner {
+        background: var(--bg-card);
+        border: 1px solid #ffedd5;
+        border-radius: 14px;
+        padding: 14px 16px;
+        display: flex;
+        gap: 12px;
+    }
+
+    [data-theme="dark"] .sms-alert-banner {
+        border-color: #7c2d12;
+        background: rgba(254, 243, 199, 0.05);
+    }
+
+    .sms-alert-banner i {
+        color: #b45309;
+        font-size: 16px;
+        margin-top: 2px;
+    }
+
+    .sms-alert-content h4 {
+        color: #78350f;
+        font-size: 14px;
+        font-weight: 700;
+        margin-bottom: 2px;
+    }
+
+    [data-theme="dark"] .sms-alert-content h4 {
+        color: #fcd34d;
+    }
+
+    .sms-alert-content p {
+        color: #92400e;
+        font-size: 13px;
+        line-height: 1.35;
+    }
+
+    [data-theme="dark"] .sms-alert-content p {
+        color: #fef3c7;
+    }
+
+    /* Live Queue Components */
+    .live-queue-wrapper h3 {
+        font-size: 16px;
+        font-weight: 700;
+        color: var(--text-main);
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .live-indicator {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        font-size: 12px;
+        color: #22c55e;
+        font-weight: 600;
+    }
+
+    .live-indicator::before {
+        content: "";
+        width: 6px;
+        height: 6px;
+        background: #22c55e;
+        border-radius: 50%;
+    }
+
+    .live-status-container {
+        border: 1.5px solid #bde7d8;
+        background: var(--brand-light-bg);
+        border-radius: 12px;
+        padding: 12px 16px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition: background 0.3s ease, border-color 0.3s ease;
+    }
+
+    [data-theme="dark"] .live-status-container {
+        border-color: #065f46;
+    }
+
+    .live-status-left {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+    }
+
+    .current-token-id {
+        font-size: 22px;
+        font-weight: 900;
+        color: var(--brand-text-light);
+    }
+
+    .serving-details h5 {
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--text-main);
+    }
+
+    .serving-details p {
+        font-size: 12px;
+        color: var(--text-muted);
+    }
+
+    .status-tag {
+        font-size: 13px;
+        font-weight: 600;
+        color: var(--brand-text-light);
+    }
+
+    /* RESPONSIVE DESIGN SYSTEM */
+    @media(max-width: 1200px) {
+        .main-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+
+    @media(max-width: 992px) {
+        .sidebar {
+            width: 70px;
+        }
+        .sidebar .logo-section .tagline,
+        .sidebar .menu .section-title,
+        .sidebar .menu span,
+        .sidebar .menu .badge,
+        .sidebar .user-info,
+        .sidebar .dots {
+            display: none;
+        }
+        .sidebar .logo-img {
+            width: 40px;
+        }
+        .main-content {
+            margin-left: 70px;
+            padding: 20px;
+        }
+        .welcome-hero {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 16px;
+        }
+        .search-box {
+            width: 240px;
+        }
+    }
+
+    @media(max-width: 650px) {
+        .topbar {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 15px;
+        }
+        .top-actions {
+            width: 100%;
+            justify-content: space-between;
+        }
+        .search-box {
+            width: 100%;
+            flex: 1;
+        }
+    }
+</style>
+</head>
+<body>
+
+<div class="app-container">
+
+    <div class="sidebar">
+        <div>
+            <div class="logo-section">
+                <img src="logo.jpeg" alt="CareFlow Logo" class="logo-img">
+                <div class="tagline">Smart OPD Booking System</div>
+            </div>
+
+            <div class="menu">
+                <div class="section-title">MAIN</div>
+
+                <a href="dashboard.html">
+                    <div class="menu-item active">
+                        <div class="menu-left">
+                            <i class="fa-solid fa-table-cells-large"></i>
+                            <span>Dashboard</span>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="live-queue.html">
+                    <div class="menu-item">
+                        <div class="menu-left">
+                            <i class="fa-solid fa-list-ol"></i>
+                            <span>Live Queue</span>
+                        </div>
+                        <div class="badge">3 Ahead</div>
+                    </div>
+                </a>
+
+                <a href="book-appointment.html">
+                    <div class="menu-item">
+                        <div class="menu-left">
+                            <i class="fa-regular fa-calendar-plus"></i>
+                            <span>Book Appointment</span>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="my-bookings.html">
+                    <div class="menu-item">
+                        <div class="menu-left">
+                            <i class="fa-regular fa-calendar-days"></i>
+                            <span>My Bookings</span>
+                        </div>
+                    </div>
+                </a>
+
+                <div class="section-title">ACCOUNT</div>
+
+                <a href="profile.html">
+                    <div class="menu-item">
+                        <div class="menu-left">
+                            <i class="fa-regular fa-user"></i>
+                            <span>Profile</span>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="notifications.html">
+                    <div class="menu-item">
+                        <div class="menu-left">
+                            <i class="fa-regular fa-bell"></i>
+                            <span>Notifications</span>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <div class="user-section">
+            <div class="user">
+                <div class="user-left">
+                    <div class="avatar">ST</div>
+                    <div class="user-info">
+                        <h3>Sushil Thapa</h3>
+                        <p>+977-9812345678</p>
+                    </div>
+                </div>
+                <div class="dots">
+                    <i class="fa-solid fa-ellipsis-vertical"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <main class="main-content">
+        <div class="dashboard-wrapper">
+
+            <div class="topbar">
+                <h1>Dashboard</h1>
+                <div class="top-actions">
+                    <div class="search-box">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <input type="text" placeholder="Search appointments, doctors...">
+                    </div>
+                    
+                    <button class="icon-btn" id="theme-toggle" title="Toggle Light/Dark Mode">
+                        <i class="fa-regular fa-moon"></i>
+                        <i class="fa-regular fa-sun"></i>
+                    </button>
+
+                    <button class="icon-btn">
+                        <i class="fa-regular fa-bell"></i>
+                        <span class="notification-dot"></span>
+                    </button>
+                    <button class="icon-btn">
+                        <i class="fa-regular fa-circle-question"></i>
+                    </button>
+                </div>
+            </div>
+
+            <div class="welcome-hero">
+                <div class="hero-text-block">
+                    <small>Good morning,</small>
+                    <h2>Sushil Thapa 👋</h2>
+                    <p>You have an active queue token. Track your position in real time.</p>
+                </div>
+                <div class="hero-buttons-block">
+                    <button class="track-btn">
+                        <i class="fa-solid fa-list-ol"></i> Track Queue
+                    </button>
+                    <button class="new-btn">+ New Booking</button>
+                </div>
+            </div>
+
+            <div class="main-grid">
+
+                <div class="left-column">
+                    
+                    <div class="card">
+                        <div class="card-header">
+                            <h2>Departments</h2>
+                            <a href="#" class="see-all">See all &rarr;</a>
+                        </div>
+                        <div class="departments-list">
+                            <button class="dept-btn"><i class="fa-solid fa-stethoscope"></i> General OPD</button>
+                            <button class="dept-btn"><i class="fa-solid fa-heart-pulse"></i> Cardiology</button>
+                            <button class="dept-btn active"><i class="fa-solid fa-baby"></i> Pediatrics</button>
+                            <button class="dept-btn"><i class="fa-solid fa-bone"></i> Orthopedics</button>
+                            <button class="dept-btn"><i class="fa-solid fa-droplet"></i> Dermatology</button>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <h2>Available Today</h2>
+                            <a href="#" class="see-all">All doctors &rarr;</a>
+                        </div>
+                        <div class="doctor-inner-card">
+                            <div class="doc-info-block">
+                                <div class="doc-avatar">PJ</div>
+                                <div class="doc-text">
+                                    <h3>Dr. Pawan Joshi</h3>
+                                    <p>MBBS, DCH — Pediatrics</p>
+                                    <div class="doc-meta-tags">
+                                        <span class="break-badge">On Break</span>
+                                        <span class="rating"><i class="fa-solid fa-star"></i> 4.6</span>
+                                        <span class="price">Rs. 600</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="doc-action-block">
+                                <button class="book-now-btn">Book Now</button>
+                                <button class="view-profile-btn">View Profile</button>
+                                <span class="slots-left">5 slots left</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="right-column">
+                    
+                    <div class="token-hero-banner">
+                        <div class="hero-label">My Token</div>
+                        <div class="hero-token-id">A-47</div>
+                        <div class="hero-doc-details">Dr. Ramesh KC &middot; General OPD</div>
+                        <div class="hero-metrics-row">
+                            <div class="metric-box">
+                                <h4>A-47</h4>
+                                <p>Now Serving</p>
+                            </div>
+                            <div class="metric-box">
+                                <h4>0</h4>
+                                <p>Ahead</p>
+                            </div>
+                            <div class="metric-box">
+                                <h4>~30</h4>
+                                <p>Min ETA</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tracker-card">
+                        <div class="tracker-timeline-labels">
+                            <span>Token A-1</span>
+                            <span class="highlight-user">A-47 (You)</span>
+                            <span>A-60</span>
+                        </div>
+                        <div class="tracker-bar-bg">
+                            <div class="tracker-bar-fill"></div>
+                        </div>
+                        <div class="tracker-footer">73% of queue completed today</div>
+                    </div>
+
+                    <div class="sms-alert-banner">
+                        <i class="fa-regular fa-comment"></i>
+                        <div class="sms-alert-content">
+                            <h4>SMS Alert Active</h4>
+                            <p>You'll get an SMS 5 tokens before your turn. Stay within hospital premises.</p>
+                        </div>
+                    </div>
+
+                    <div class="live-queue-wrapper">
+                        <h3>Live Queue <span class="live-indicator">Live</span></h3>
+                        <div class="live-status-container">
+                            <div class="live-status-left">
+                                <div class="current-token-id">A-44</div>
+                                <div class="serving-details">
+                                    <h5>Now Serving</h5>
+                                    <p>Since 10:42 AM</p>
+                                </div>
+                            </div>
+                            <div class="status-tag">Active</div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </main>
+
+</div>
+
+<script>
+    const themeToggleBtn = document.getElementById('theme-toggle');
+    
+    // Check local storage for persistent preference, fallback to light mode
+    const currentTheme = localStorage.getItem('theme') || 'light';
+    if (currentTheme === 'dark') {
+        document.documentElement.setAttribute('data-theme', 'dark');
+    }
+
+    themeToggleBtn.addEventListener('click', () => {
+        let theme = 'light';
+        if (document.documentElement.getAttribute('data-theme') !== 'dark') {
+            document.documentElement.setAttribute('data-theme', 'dark');
+            theme = 'dark';
+        } else {
+            document.documentElement.removeAttribute('data-theme');
+        }
+        // Save user preference
+        localStorage.setItem('theme', theme);
+    });
+</script>
+
+</body>
+</html>
