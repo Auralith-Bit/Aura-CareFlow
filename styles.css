@@ -1,0 +1,177 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI',sans-serif;
+}
+
+body{
+    background:#f4f6f9;
+}
+
+/* Sidebar */
+.sidebar{
+    width:240px;
+    height:100vh;
+    background:#045743;
+    color:white;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+}
+
+/* Remove link style */
+.sidebar a{
+    text-decoration:none;
+    color:inherit;
+    display:block;
+}
+
+/* Logo Section */
+.logo-section{
+    padding:15px;
+    text-align:center;
+    border-bottom:1px solid rgba(255,255,255,.08);
+}
+
+.logo-img{
+    width:90px;
+    height:auto;
+    display:block;
+    margin:auto;
+}
+
+.tagline{
+    margin-top:8px;
+    color:#bfd1cb;
+    font-size:11px;
+    font-weight:500;
+    letter-spacing:.5px;
+}
+
+/* Menu */
+.menu{
+    flex:1;
+    padding:15px 10px;
+}
+
+.section-title{
+    color:#86a79f;
+    font-size:11px;
+    font-weight:700;
+    letter-spacing:1px;
+    margin:10px;
+}
+
+.menu-item{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:10px 12px;
+    margin:5px 0;
+    border-radius:12px;
+    cursor:pointer;
+    transition:.3s;
+}
+
+.menu-item:hover{
+    background:rgba(255,255,255,.08);
+}
+
+.menu-left{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+.menu-left i{
+    font-size:18px;
+    width:20px;
+    color:#c8d8d2;
+}
+
+.menu-left span{
+    font-size:15px;
+    color:#d7e2de;
+}
+
+.active{
+    background:rgba(255,255,255,.15);
+    position:relative;
+}
+
+.badge {
+    background: #15b887;
+    color: white;
+    font-size: 10px;
+    padding: 3px 8px;
+    border-radius: 20px;
+    font-weight: 600;
+}
+
+.active::before{
+    content:"";
+    position:absolute;
+    left:0;
+    top:10px;
+    bottom:10px;
+    width:4px;
+    background:#18d4a1;
+    border-radius:10px;
+}
+
+.badge{
+    background:#15b887;
+    color:white;
+    font-size:10px;
+    padding:3px 8px;
+    border-radius:20px;
+    font-weight:600;
+}
+
+/* User Section */
+.user-section{
+    border-top:1px solid rgba(255,255,255,.08);
+    padding:12px;
+}
+
+.user{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.user-left{
+    display:flex;
+    align-items:center;
+    gap:10px;
+}
+
+.avatar{
+    width:45px;
+    height:45px;
+    border-radius:50%;
+    background:#1fb087;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:16px;
+    font-weight:700;
+    border:2px solid rgba(255,255,255,.2);
+}
+
+.user-info h3{
+    font-size:14px;
+    margin-bottom:2px;
+}
+
+.user-info p{
+    color:#a9c0b8;
+    font-size:11px;
+}
+
+.dots{
+    color:#78938c;
+    font-size:16px;
+    cursor:pointer;
+}
