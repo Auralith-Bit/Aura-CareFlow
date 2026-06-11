@@ -1783,7 +1783,9 @@ let activityLog = [
   { time:'09:10', msg:'Walk-in token A-53 issued to Sarita Poudel', type:'issue' },
 ];
 
+
 // NAVIGATION
+
 function setNav(el, viewName) {
   document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
   el.classList.add('active');
@@ -2164,6 +2166,7 @@ function reuseSlot(id) {
   showToast(`🟢 Slot ${slot.token} selected for reassignment`, 'info');
 }
 
+
 // CANCEL part
 function openCancel(id) {
   const t = queueData.find(x => x.id === id);
@@ -2253,6 +2256,7 @@ function openPrintSlipDirect(token, name, doctor, dept, room, time) {
 function printSlip() {
   window.print();
 }
+
 
 // PATIENT SEARCH
 function setSearchType(type, btn) {
@@ -2454,6 +2458,7 @@ renderQueueTable();
 renderRecentWalkIns();
 
 // THEME TOGGLE (LIGHT / DARK MODE)
+
 function initTheme() {
   const savedTheme = localStorage.getItem('careflow-theme');
   const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
@@ -2518,9 +2523,11 @@ function renderBackButton(show = false) {
 }
 
 // STAT CARD CLICK — navigate to queue with the right filter active
+// STAT CARD CLICK — navigate to queue with the right filter active
 function statCardClick(filter) {
   setNavById('queue');
   
+  // Find the matching filter button and activate it
   const filterBtns = document.querySelectorAll('.filter-btn');
   let targetBtn = null;
   filterBtns.forEach(btn => {
@@ -2543,6 +2550,7 @@ function statCardClick(filter) {
 // Initialize theme on page load
 initTheme();
 
+// Simulate a patient cancellation from app after 8 seconds
 setTimeout(() => {
   const t = queueData.find(x => x.id === 5);
   if (t && t.status === 'waiting') {
@@ -2575,7 +2583,10 @@ function setNav(el, viewName) {
   };
   document.getElementById('topbar-title').innerHTML = titles[viewName] || viewName;
 
+
+  // Hide back button if navigating anywhere through main standard menus directly
   if (viewName !== 'queue') renderBackButton(false); 
+
   if (viewName === 'queue' || viewName === 'schedule') renderQueueTable();
   if (viewName === 'checkin') renderCheckInTable();
   if (viewName === 'walkin') renderRecentWalkIns();
