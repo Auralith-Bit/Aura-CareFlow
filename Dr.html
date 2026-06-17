@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CareFlow</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/3.35.0/tabler-icons.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--g50:#f0fdf4;--g100:#dcfce7;--g200:#bbf7d0;--g400:#4ade80;--g500:#22c55e;--g600:#16a34a;--g700:#15803d;--g800:#166534;--g900:#14532d;
+--color-background-primary:#ffffff;--color-background-secondary:#f8fafc;--color-background-tertiary:#f1f5f9;
+--color-text-primary:#0f172a;--color-text-secondary:#475569;--border-soft:rgba(0,0,0,.09);--border-softer:rgba(0,0,0,.06);--hover-tint:#f1f5f9}
+[data-theme="dark"]{--color-background-primary:#1e293b;--color-background-secondary:#162032;--color-background-tertiary:#0b1220;
+--color-text-primary:#e7eef7;--color-text-secondary:#93a4bd;--border-soft:rgba(255,255,255,.12);--border-softer:rgba(255,255,255,.08);--hover-tint:#243044}
+[data-theme="dark"] .card,[data-theme="dark"] .ch,[data-theme="dark"] .topbar,[data-theme="dark"] .tabs,[data-theme="dark"] .tbl th,
+[data-theme="dark"] .tbl td,[data-theme="dark"] .ab,[data-theme="dark"] .qb,[data-theme="dark"] .form-group input,
+[data-theme="dark"] .form-group select,[data-theme="dark"] .form-group textarea,[data-theme="dark"] .btn-sec,
+[data-theme="dark"] .search-bar input,[data-theme="dark"] .pcard,[data-theme="dark"] .history-item,
+[data-theme="dark"] .settings-section h4,[data-theme="dark"] .sched-row,[data-theme="dark"] .notif-item,
+[data-theme="dark"] #noteModalWrap>div,[data-theme="dark"] #referModalWrap>div,[data-theme="dark"] .theme-toggle{border-color:var(--border-soft)}
+[data-theme="dark"] .ab:hover,[data-theme="dark"] .qb:hover,[data-theme="dark"] .theme-toggle:hover{background:var(--hover-tint)}
+[data-theme="dark"] .tbl tr:hover td{background:#16342966}
+[data-theme="dark"] .tbl tr.cur td{background:#14532d55}
+[data-theme="dark"] .vcard{background:#14532d40;border-color:#15803d80}
+[data-theme="dark"] .vcard.warn{background:#92400e40;border-color:#fcd34d80}
+[data-theme="dark"] .vcard.danger{background:#99181840;border-color:#fca5a580}
+[data-theme="dark"] .qb.emg{background:#14532d40;border-color:#15803d}
+[data-theme="dark"] ::placeholder{color:#5b6b85}
+.theme-toggle{font-size:12px;padding:.3rem .75rem;display:flex;align-items:center;gap:5px}
+body{font-family:var(--font-sans,system-ui,sans-serif);background:var(--color-background-tertiary,#f1f5f9);color:var(--color-text-primary,#0f172a);min-height:100vh}
+.shell{display:grid;grid-template-columns:240px 1fr;min-height:100vh}
+.sidebar{background:var(--g800);display:flex;flex-direction:column}
+.slogo{padding:1rem .875rem;border-bottom:1px solid rgba(255,255,255,.12);display:flex;align-items:center;gap:9px}
+.slogo-mark{width:34px;height:34px;border-radius:8px;background:var(--g400);display:flex;align-items:center;justify-content:center}
+.slogo-mark i{font-size:18px;color:var(--g900)}
+.slogo-text{font-size:14px;font-weight:500;color:#fff;line-height:1.2}
+.slogo-sub{font-size:10px;opacity:.55;color:#fff}
+.snav{padding:.625rem .5rem;flex:1;overflow-y:auto}
+.snav-label{font-size:10px;letter-spacing:.07em;opacity:.4;padding:.5rem .625rem .2rem;color:#fff;text-transform:uppercase}
+.sitem{display:flex;align-items:center;gap:9px;padding:.5rem .75rem;border-radius:7px;font-size:13px;cursor:pointer;margin-bottom:1px;color:rgba(255,255,255,.7);transition:background .12s}
+.sitem:hover{background:rgba(255,255,255,.08)}
+.sitem.active{background:var(--g600);color:#fff;font-weight:500}
+.sitem i{font-size:17px;flex-shrink:0}
+.sdoc{padding:.875rem;border-top:1px solid rgba(255,255,255,.1);display:flex;align-items:center;gap:9px}
+.sdoc-av{width:34px;height:34px;border-radius:50%;background:var(--g400);display:flex;align-items:center;justify-content:center;font-weight:500;font-size:12px;color:var(--g900);flex-shrink:0}
+.sdoc-name{font-size:12px;font-weight:500;color:#fff}
+.sdoc-role{font-size:10px;color:rgba(255,255,255,.5)}
+.sbtn{margin-left:auto;padding:3px 7px;border-radius:20px;font-size:10px;border:none;cursor:pointer;font-weight:500;background:var(--g400);color:var(--g900)}
+.main{display:flex;flex-direction:column;min-height:100vh}
+.topbar{background:var(--color-background-primary,#fff);border-bottom:.5px solid rgba(0,0,0,.1);padding:.625rem 1.25rem;display:flex;align-items:center;gap:10px}
+.topbar-title{font-size:15px;font-weight:500;flex:1}
+.tdate{font-size:12px;color:var(--color-text-secondary,#475569)}
+.bdg{display:inline-flex;align-items:center;gap:4px;padding:2px 9px;border-radius:20px;font-size:11px;font-weight:500}
+.bg{background:var(--g100);color:var(--g800)}
+.ba{background:#fef3c7;color:#92400e}
+.br{background:#fee2e2;color:#991b1b}
+.bs{background:#f1f5f9;color:#334155}
+.bb{background:#eff6ff;color:#1e40af}
+.bp{background:#fdf4ff;color:#6b21a8}
+.dot-live{width:7px;height:7px;border-radius:50%;background:var(--g500);display:inline-block;animation:pulse 1.4s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.35}}
+.tabs{display:flex;gap:2px;padding:.5rem 1.25rem 0;background:var(--color-background-primary,#fff);border-bottom:.5px solid rgba(0,0,0,.08)}
+.tab{padding:.5rem .875rem;font-size:12.5px;cursor:pointer;border-bottom:2px solid transparent;color:var(--color-text-secondary,#475569);transition:color .12s;white-space:nowrap}
+.tab.active{color:var(--g700);border-bottom-color:var(--g600);font-weight:500}
+.tab:hover:not(.active){color:var(--color-text-primary,#0f172a)}
+.page{display:none;padding:1.125rem 1.25rem;flex:1}
+.page.active{display:block}
+.grid2{display:grid;grid-template-columns:1fr 320px;gap:1.125rem;align-items:start}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem}
+.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:.75rem}
+.card{background:var(--color-background-primary,#fff);border:.5px solid rgba(0,0,0,.09);border-radius:12px;overflow:hidden}
+.ch{padding:.75rem 1rem;border-bottom:.5px solid rgba(0,0,0,.07);display:flex;align-items:center;gap:7px}
+.ch-title{font-size:13.5px;font-weight:500;flex:1}
+.ch i{font-size:17px;color:var(--g600)}
+.cb{padding:.875rem 1rem}
+.stat-card{background:var(--color-background-secondary,#f8fafc);border-radius:8px;padding:.75rem;text-align:center}
+.sv{font-size:24px;font-weight:500;color:var(--g700);line-height:1}
+.sl{font-size:11px;color:var(--color-text-secondary,#64748b);margin-top:3px}
+.sv.red{color:#dc2626}
+.sv.amber{color:#d97706}
+.tbl{width:100%;border-collapse:collapse}
+.tbl th{font-size:11px;color:var(--color-text-secondary,#475569);font-weight:500;text-align:left;padding:.45rem .875rem;background:var(--color-background-secondary,#f8fafc);border-bottom:.5px solid rgba(0,0,0,.07)}
+.tbl td{padding:.65rem .875rem;font-size:13px;border-bottom:.5px solid rgba(0,0,0,.05);vertical-align:middle}
+.tbl tr:last-child td{border-bottom:none}
+.tbl tr:hover td{background:var(--g50)}
+.tbl tr.cur td{background:#f0fdf4}
+.tbl tr.cancelled-row td{opacity:.5;text-decoration:line-through}
+.tnum{width:30px;height:30px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-weight:500;font-size:12px;background:var(--g100);color:var(--g800)}
+.tnum.cur{background:var(--g600);color:#fff}
+.pname{font-weight:500;font-size:13px}
+.pmeta{font-size:11px;color:var(--color-text-secondary,#64748b);margin-top:1px}
+.abts{display:flex;gap:3px}
+.ab{padding:2px 7px;border-radius:5px;font-size:11px;border:.5px solid rgba(0,0,0,.12);background:transparent;cursor:pointer;color:var(--color-text-secondary,#475569);font-family:inherit}
+.ab:hover{background:#f1f5f9}
+.ab.g{color:var(--g700);border-color:#86efac}
+.ab.g:hover{background:var(--g50)}
+.call-panel{background:var(--g600);border-radius:12px;padding:1.125rem;color:#fff;margin-bottom:1rem}
+.cp-lbl{font-size:11px;opacity:.7;margin-bottom:.2rem}
+.cp-tok{font-size:38px;font-weight:500;line-height:1;color:#fff}
+.cp-name{font-size:14px;font-weight:500;margin-top:.2rem}
+.cp-cc{font-size:11px;opacity:.65;margin-bottom:.75rem}
+.cp-timer{font-size:12px;opacity:.75;margin-bottom:.875rem;display:flex;align-items:center;gap:5px}
+.cp-btn{width:100%;padding:.75rem;border:none;border-radius:9px;background:#fff;color:var(--g800);font-size:14px;font-weight:500;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:7px;font-family:inherit}
+.cp-btn:hover{opacity:.92}
+.cp-btn i{font-size:18px}
+.qctrl{display:grid;grid-template-columns:1fr 1fr;gap:.5rem;padding:.875rem 1rem}
+.qb{padding:.55rem .5rem;border-radius:7px;border:.5px solid rgba(0,0,0,.11);background:transparent;cursor:pointer;font-size:12px;font-family:inherit;display:flex;align-items:center;justify-content:center;gap:5px;color:var(--color-text-primary,#0f172a)}
+.qb:hover{background:#f1f5f9}
+.qb i{font-size:15px;color:var(--g600)}
+.qb.danger i{color:#dc2626}
+.qb.emg{grid-column:span 2;background:var(--g50);border-color:#86efac;color:var(--g800)}
+.qb.emg:hover{background:var(--g100)}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:.625rem;margin-bottom:.625rem}
+.form-group{display:flex;flex-direction:column;gap:4px;margin-bottom:.625rem}
+.form-group label{font-size:12px;color:var(--color-text-secondary,#475569);font-weight:500}
+.form-group input,.form-group select,.form-group textarea{padding:.45rem .625rem;border:.5px solid rgba(0,0,0,.15);border-radius:7px;font-size:13px;font-family:inherit;background:var(--color-background-primary,#fff);color:var(--color-text-primary,#0f172a)}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{outline:none;border-color:var(--g500)}
+.form-group textarea{resize:vertical;min-height:70px}
+.btn-primary{padding:.55rem 1.25rem;border:none;border-radius:8px;background:var(--g600);color:#fff;font-size:13px;font-weight:500;cursor:pointer;font-family:inherit}
+.btn-primary:hover{background:var(--g700)}
+.btn-sec{padding:.55rem 1rem;border:.5px solid rgba(0,0,0,.12);border-radius:8px;background:transparent;font-size:13px;cursor:pointer;font-family:inherit;color:var(--color-text-secondary,#64748b)}
+.vitals-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.625rem;margin-bottom:.875rem}
+.vcard{background:var(--g50);border:.5px solid #86efac;border-radius:9px;padding:.625rem .75rem;text-align:center}
+.vval{font-size:20px;font-weight:500;color:var(--g800)}
+.vlbl{font-size:10px;color:var(--g700);margin-top:2px}
+.vcard.warn{background:#fef3c7;border-color:#fcd34d}
+.vcard.warn .vval{color:#92400e}
+.vcard.warn .vlbl{color:#b45309}
+.vcard.danger{background:#fee2e2;border-color:#fca5a5}
+.vcard.danger .vval{color:#991b1b}
+.vcard.danger .vlbl{color:#b91c1c}
+.history-item{padding:.625rem .875rem;border-bottom:.5px solid rgba(0,0,0,.06);display:flex;align-items:flex-start;gap:.625rem}
+.history-item:last-child{border-bottom:none}
+.hdate{font-size:11px;color:var(--color-text-secondary,#64748b);min-width:72px}
+.hcontent{flex:1}
+.htitle{font-size:13px;font-weight:500}
+.hdesc{font-size:11px;color:var(--color-text-secondary,#64748b);margin-top:2px}
+.toast{position:absolute;top:12px;right:12px;background:var(--g700);color:#fff;padding:.5rem 1rem;border-radius:8px;font-size:13px;display:none;z-index:200;font-family:inherit}
+.toast.show{display:block;animation:fadeout 2.5s forwards}
+@keyframes fadeout{0%,70%{opacity:1}100%{opacity:0}}
+.search-bar{display:flex;gap:.5rem;margin-bottom:.875rem}
+.search-bar input{flex:1;padding:.45rem .75rem;border:.5px solid rgba(0,0,0,.12);border-radius:7px;font-size:13px;font-family:inherit;background:var(--color-background-primary,#fff);color:var(--color-text-primary,#0f172a)}
+.search-bar input:focus{outline:none;border-color:var(--g500)}
+.pcard{background:var(--color-background-primary,#fff);border:.5px solid rgba(0,0,0,.09);border-radius:10px;padding:.875rem;margin-bottom:.625rem;display:flex;align-items:center;gap:.875rem}
+.pav{width:40px;height:40px;border-radius:50%;background:var(--g100);display:flex;align-items:center;justify-content:center;font-weight:500;font-size:13px;color:var(--g800);flex-shrink:0}
+.pinfo{flex:1}
+.pn{font-weight:500;font-size:13.5px}
+.pm{font-size:11px;color:var(--color-text-secondary,#64748b);margin-top:2px}
+.pacts{display:flex;gap:.375rem}
+.sched-row{display:grid;grid-template-columns:60px 1fr auto;gap:.75rem;align-items:center;padding:.625rem .875rem;border-bottom:.5px solid rgba(0,0,0,.06)}
+.sched-row:last-child{border-bottom:none}
+.stime{font-size:13px;font-weight:500;color:var(--g700)}
+.sinfo{font-size:13px}
+.smeta{font-size:11px;color:var(--color-text-secondary,#64748b);margin-top:1px}
+.prog-bar{height:5px;background:#e2e8f0;border-radius:3px;margin-top:.5rem}
+.prog-fill{height:100%;background:var(--g500);border-radius:3px;transition:width .4s}
+.notif-item{display:flex;gap:.75rem;padding:.625rem .875rem;border-bottom:.5px solid rgba(0,0,0,.06);align-items:flex-start}
+.notif-item:last-child{border-bottom:none}
+.notif-icon{width:30px;height:30px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:15px}
+.ni-green{background:var(--g100);color:var(--g700)}
+.ni-amber{background:#fef3c7;color:#d97706}
+.ni-red{background:#fee2e2;color:#dc2626}
+.ni-blue{background:#eff6ff;color:#2563eb}
+.notif-text{font-size:12.5px;flex:1}
+.notif-time{font-size:11px;color:var(--color-text-secondary,#64748b)}
+.settings-section{margin-bottom:1.25rem}
+.settings-section h4{font-size:13px;font-weight:500;margin-bottom:.625rem;color:var(--color-text-secondary,#475569);border-bottom:.5px solid rgba(0,0,0,.08);padding-bottom:.375rem}
+.toggle-row{display:flex;align-items:center;justify-content:space-between;padding:.45rem 0;font-size:13px}
+.toggle{position:relative;width:36px;height:20px}
+.toggle input{opacity:0;width:0;height:0}
+.tslider{position:absolute;cursor:pointer;inset:0;background:#cbd5e1;border-radius:20px;transition:.2s}
+.tslider:before{content:'';position:absolute;height:14px;width:14px;left:3px;bottom:3px;background:#fff;border-radius:50%;transition:.2s}
+.toggle input:checked+.tslider{background:var(--g500)}
+.toggle input:checked+.tslider:before{transform:translateX(16px)}
+</style>
+<div id="toast" class="toast"></div>
+
+<div class="shell">
+  <aside class="sidebar">
+    <div class="slogo">
+      <div class="slogo-mark"><i class="ti ti-heartbeat" aria-hidden="true"></i></div>
+      <div><div class="slogo-text">NoWait HMS</div><div class="slogo-sub">Doctor Module v2.0</div></div>
+    </div>
+    <nav class="snav">
+      <div class="snav-label">Consultation</div>
+      <div class="sitem active" onclick="showTab('queue',this)"><i class="ti ti-layout-list" aria-hidden="true"></i> Today's Queue</div>
+      <div class="sitem" onclick="showTab('register',this)"><i class="ti ti-user-plus" aria-hidden="true"></i> Register Patient</div>
+      <div class="sitem" onclick="showTab('vitals',this)"><i class="ti ti-activity" aria-hidden="true"></i> Record Vitals</div>
+      <div class="snav-label">Records</div>
+      <div class="sitem" onclick="showTab('patients',this)"><i class="ti ti-users" aria-hidden="true"></i> Patient Directory</div>
+      <div class="sitem" onclick="showTab('history',this)"><i class="ti ti-history" aria-hidden="true"></i> Visit History</div>
+      <div class="sitem" onclick="showTab('schedule',this)"><i class="ti ti-calendar" aria-hidden="true"></i> Schedule View</div>
+      <div class="snav-label">System</div>
+      <div class="sitem" onclick="showTab('notifications',this)"><i class="ti ti-bell" aria-hidden="true"></i> Notifications <span class="bdg bb" style="margin-left:auto;font-size:10px;padding:1px 6px" id="notifBadge">3</span></div>
+      <div class="sitem" onclick="showTab('settings',this)"><i class="ti ti-settings" aria-hidden="true"></i> Settings</div>
+    </nav>
+    <div class="sdoc">
+      <div class="sdoc-av">DR</div>
+      <div><div class="sdoc-name">Dr. Ramesh K.</div><div class="sdoc-role">General Physician</div></div>
+      <button class="sbtn" id="docStatusBtn" onclick="cycleStatus()">Available</button>
+    </div>
+  </aside>
+  <main class="main">
+    <div class="topbar">
+      <div class="topbar-title" id="pageTitle"><i class="ti ti-layout-list" style="font-size:17px;color:var(--g600);vertical-align:-3px;margin-right:5px" aria-hidden="true"></i>Today's Token Queue</div>
+      <div class="tdate"><i class="ti ti-calendar" style="font-size:14px;vertical-align:-2px;margin-right:3px" aria-hidden="true"></i>Sun, 14 Jun 2026</div>
+      <div class="bdg bg"><span class="dot-live"></span> Live</div>
+      <button class="btn-sec theme-toggle" id="themeToggleBtn" onclick="toggleTheme()"><i class="ti ti-moon" id="themeIcon" aria-hidden="true"></i> <span id="themeLabel">Dark</span></button>
+      <button class="btn-sec" style="font-size:12px;padding:.3rem .75rem" onclick="printQueue()"><i class="ti ti-printer" style="font-size:14px;vertical-align:-2px" aria-hidden="true"></i> Print</button>
+    </div>
+    <div class="tabs">
+      <div class="tab active" id="tab-queue" onclick="showTab('queue',null)">Queue</div>
+      <div class="tab" id="tab-register" onclick="showTab('register',null)">Register</div>
+      <div class="tab" id="tab-vitals" onclick="showTab('vitals',null)">Vitals</div>
+      <div class="tab" id="tab-patients" onclick="showTab('patients',null)">Patients</div>
+      <div class="tab" id="tab-history" onclick="showTab('history',null)">History</div>
+      <div class="tab" id="tab-schedule" onclick="showTab('schedule',null)">Schedule</div>
+      <div class="tab" id="tab-notifications" onclick="showTab('notifications',null)">Notifications</div>
+      <div class="tab" id="tab-settings" onclick="showTab('settings',null)">Settings</div>
+    </div>
+    <!-- QUEUE PAGE -->
+    <div class="page active" id="page-queue">
+      <div class="grid2">
+        <div>
+          <div class="grid4" style="margin-bottom:.875rem">
+            <div class="stat-card"><div class="sv" id="sDone">3</div><div class="sl">Done</div></div>
+            <div class="stat-card"><div class="sv" id="sWait">7</div><div class="sl">Waiting</div></div>
+            <div class="stat-card"><div class="sv amber" id="sSkip">1</div><div class="sl">Skipped</div></div>
+            <div class="stat-card"><div class="sv" id="sEst">~70m</div><div class="sl">Est. left</div></div>
+          </div>
+          <div class="card">
+            <div class="ch"><i class="ti ti-list-numbers" aria-hidden="true"></i><span class="ch-title">Patient token list</span><span class="bdg bg" id="totalBdg">12 Tokens</span></div>
+            <div style="overflow-x:auto">
+              <table class="tbl"><thead><tr><th>Token</th><th>Patient</th><th>Age</th><th>Complaint</th><th>Vitals</th><th>Status</th><th>Actions</th></tr></thead>
+              <tbody id="queueBody"></tbody></table>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="call-panel">
+            <div class="cp-lbl">Now consulting</div>
+            <div class="cp-tok" id="cpTok">T-04</div>
+            <div class="cp-name" id="cpName">Sunita Sharma</div>
+            <div class="cp-cc" id="cpCC">Fever & body ache since 3 days</div>
+            <div class="cp-timer"><i class="ti ti-clock" style="font-size:14px" aria-hidden="true"></i><span id="timerDisp">00:00</span> elapsed · <span id="slotMin">20</span> min slot</div>
+            <button class="cp-btn" onclick="callNext()"><i class="ti ti-player-skip-forward" aria-hidden="true"></i> Call Next Token</button>
+          </div>
+          <div class="card" style="margin-bottom:.875rem">
+            <div class="ch"><i class="ti ti-adjustments-horizontal" aria-hidden="true"></i><span class="ch-title">Queue control</span></div>
+            <div class="qctrl">
+              <button class="qb" onclick="holdToken()"><i class="ti ti-player-pause" aria-hidden="true"></i> Hold</button>
+              <button class="qb" onclick="skipToken()"><i class="ti ti-player-track-next" aria-hidden="true"></i> Skip</button>
+              <button class="qb danger" onclick="markNoShow()"><i class="ti ti-user-x" aria-hidden="true"></i> No Show</button>
+              <button class="qb" onclick="markDone()"><i class="ti ti-check" aria-hidden="true"></i> Mark Done</button>
+              <button class="qb" onclick="openNoteModal(null)"><i class="ti ti-note" style="color:var(--g600)" aria-hidden="true"></i> Quick Note</button>
+              <button class="qb" onclick="reorderQueue()"><i class="ti ti-arrows-sort" style="color:var(--g600)" aria-hidden="true"></i> Re-order</button>
+              <button class="qb" onclick="openReferModal(null)"><i class="ti ti-arrow-forward-up" style="color:var(--g600)" aria-hidden="true"></i> Refer to Dr</button>
+              <button class="qb danger" onclick="cancelToken(null)"><i class="ti ti-circle-x" aria-hidden="true"></i> Cancel</button>
+              <button class="qb emg" onclick="addEmergency()"><i class="ti ti-ambulance" style="color:#dc2626;font-size:16px" aria-hidden="true"></i> Add Emergency Token</button>
+            </div>
+          </div>
+          <div class="card">
+            <div class="ch"><i class="ti ti-progress" aria-hidden="true"></i><span class="ch-title">Today's progress</span></div>
+            <div class="cb">
+              <div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px"><span>Queue completion</span><span id="progPct" style="color:var(--g700);font-weight:500">25%</span></div>
+              <div class="prog-bar"><div class="prog-fill" id="progFill" style="width:25%"></div></div>
+              <div style="font-size:11px;color:var(--color-text-secondary,#64748b);margin-top:.5rem" id="avgTime">Avg. consultation: 8 min</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- REGISTER PAGE -->
+    <div class="page" id="page-register">
+      <div class="grid2">
+        <div class="card">
+          <div class="ch"><i class="ti ti-user-plus" aria-hidden="true"></i><span class="ch-title">Register new patient / walk-in</span></div>
+          <div class="cb">
+            <div class="form-row">
+              <div class="form-group"><label>Full name *</label><input type="text" id="regName" placeholder="Patient full name"></div>
+              <div class="form-group"><label>Age *</label><input type="number" id="regAge" placeholder="Age" min="0" max="120"></div>
+            </div>
+            <div class="form-row">
+              <div class="form-group"><label>Gender</label>
+                <select id="regGender"><option>Male</option><option>Female</option><option>Other</option></select>
+              </div>
+              <div class="form-group"><label>Phone number</label><input type="text" id="regPhone" placeholder="98XXXXXXXX"></div>
+            </div>
+            <div class="form-row">
+              <div class="form-group"><label>Token type</label>
+                <select id="regType"><option value="normal">Normal</option><option value="priority">Priority</option><option value="emergency">Emergency</option></select>
+              </div>
+              <div class="form-group"><label>Appointment time</label><input type="time" id="regTime" value="10:30"></div>
+            </div>
+            <div class="form-group"><label>Chief complaint</label><input type="text" id="regCC" placeholder="e.g. Fever, headache, follow-up..."></div>
+            <div class="form-group"><label>Address / notes</label><textarea id="regAddr" placeholder="Optional address or intake notes"></textarea></div>
+            <div style="display:flex;gap:.5rem;margin-top:.25rem">
+              <button class="btn-primary" onclick="registerPatient()"><i class="ti ti-plus" style="font-size:14px;vertical-align:-2px" aria-hidden="true"></i> Add to Queue</button>
+              <button class="btn-sec" onclick="clearRegForm()">Clear</button>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="card">
+            <div class="ch"><i class="ti ti-clipboard-list" aria-hidden="true"></i><span class="ch-title">Today's registrations</span></div>
+            <div id="regList" style="max-height:380px;overflow-y:auto"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- VITALS PAGE -->
+    <div class="page" id="page-vitals">
+      <div class="grid2">
+        <div class="card">
+          <div class="ch"><i class="ti ti-activity" aria-hidden="true"></i><span class="ch-title">Record patient vitals</span></div>
+          <div class="cb">
+            <div class="form-group"><label>Select patient / token</label>
+              <select id="vitalPatient"></select>
+            </div>
+            <div class="form-row">
+              <div class="form-group"><label>Blood pressure (mmHg)</label><input type="text" id="vBP" placeholder="120/80"></div>
+              <div class="form-group"><label>Pulse rate (bpm)</label><input type="number" id="vPulse" placeholder="72"></div>
+            </div>
+            <div class="form-row">
+              <div class="form-group"><label>Temperature (°C)</label><input type="number" step="0.1" id="vTemp" placeholder="37.0"></div>
+              <div class="form-group"><label>SpO2 (%)</label><input type="number" id="vSpo2" placeholder="98"></div>
+            </div>
+            <div class="form-row">
+              <div class="form-group"><label>Weight (kg)</label><input type="number" step="0.1" id="vWeight" placeholder="65.0"></div>
+              <div class="form-group"><label>Height (cm)</label><input type="number" id="vHeight" placeholder="165"></div>
+            </div>
+            <div class="form-group"><label>RBS / Blood sugar (mg/dL)</label><input type="number" id="vRBS" placeholder="110"></div>
+            <div style="display:flex;gap:.5rem;margin-top:.25rem">
+              <button class="btn-primary" onclick="saveVitals()"><i class="ti ti-device-floppy" style="font-size:14px;vertical-align:-2px" aria-hidden="true"></i> Save Vitals</button>
+              <button class="btn-sec" onclick="clearVitals()">Clear</button>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="card">
+            <div class="ch"><i class="ti ti-heart-rate-monitor" aria-hidden="true"></i><span class="ch-title">Current vitals — <span id="vPatientName">select patient</span></span></div>
+            <div class="cb">
+              <div class="vitals-grid" id="vitalsDisplay">
+                <div class="vcard"><div class="vval">—</div><div class="vlbl">BP (mmHg)</div></div>
+                <div class="vcard"><div class="vval">—</div><div class="vlbl">Pulse (bpm)</div></div>
+                <div class="vcard"><div class="vval">—</div><div class="vlbl">Temp (°C)</div></div>
+                <div class="vcard"><div class="vval">—</div><div class="vlbl">SpO2 (%)</div></div>
+                <div class="vcard"><div class="vval">—</div><div class="vlbl">Weight (kg)</div></div>
+                <div class="vcard"><div class="vval">—</div><div class="vlbl">BMI</div></div>
+              </div>
+              <div id="vitalsAlerts"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- PATIENTS PAGE -->
+    <div class="page" id="page-patients">
+      <div class="search-bar"><input type="text" placeholder="Search by name, phone, complaint..." id="pSearch" oninput="filterPatients()"><button class="btn-primary" onclick="filterPatients()"><i class="ti ti-search" style="font-size:14px;vertical-align:-2px" aria-hidden="true"></i> Search</button></div>
+      <div id="patientList"></div>
+    </div>
+    <!-- HISTORY PAGE -->
+    <div class="page" id="page-history">
+      <div class="card">
+        <div class="ch"><i class="ti ti-history" aria-hidden="true"></i><span class="ch-title">Visit history — all consultations</span></div>
+        <div id="historyList"></div>
+      </div>
+    </div>
+    <!-- SCHEDULE PAGE -->
+    <div class="page" id="page-schedule">
+      <div class="grid2">
+        <div class="card">
+          <div class="ch"><i class="ti ti-calendar" aria-hidden="true"></i><span class="ch-title">Daily schedule — Sun 14 Jun</span></div>
+          <div id="scheduleList"></div>
+        </div>
+        <div>
+          <div class="card">
+            <div class="ch"><i class="ti ti-clock-edit" aria-hidden="true"></i><span class="ch-title">Consultation time settings</span></div>
+            <div class="cb">
+              <div class="form-group"><label>Default slot duration (min) — 20 min minimum</label><input type="number" id="slotDurInput" value="20" min="20" max="60" onchange="updateSlot()"></div>
+              <div class="form-group"><label>Start time</label><input type="time" id="schedStart" value="09:00"></div>
+              <div class="form-group"><label>End time</label><input type="time" id="schedEnd" value="17:00"></div>
+              <div class="form-group"><label>Break time</label><input type="time" id="breakTime" value="13:00"></div>
+              <button class="btn-primary" onclick="saveSchedule()">Save schedule</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- NOTIFICATIONS PAGE -->
+    <div class="page" id="page-notifications">
+      <div class="card">
+        <div class="ch"><i class="ti ti-bell" aria-hidden="true"></i><span class="ch-title">Notifications</span><button class="btn-sec" style="font-size:11px;padding:.25rem .625rem" onclick="clearNotifs()">Clear all</button></div>
+        <div id="notifList"></div>
+      </div>
+    </div>
+    <!-- SETTINGS PAGE -->
+    <div class="page" id="page-settings">
+      <div class="grid2">
+        <div class="card">
+          <div class="ch"><i class="ti ti-settings" aria-hidden="true"></i><span class="ch-title">System settings</span></div>
+          <div class="cb">
+            <div class="settings-section">
+              <h4>Queue preferences</h4>
+              <div class="toggle-row">Auto-advance to next token after done <label class="toggle"><input type="checkbox" checked id="setAutoAdv"><span class="tslider"></span></label></div>
+              <div class="toggle-row">Show patient age in queue <label class="toggle"><input type="checkbox" checked><span class="tslider"></span></label></div>
+              <div class="toggle-row">Show chief complaint in queue <label class="toggle"><input type="checkbox" checked><span class="tslider"></span></label></div>
+              <div class="toggle-row">Alert on no-show (sound) <label class="toggle"><input type="checkbox"><span class="tslider"></span></label></div>
+            </div>
+            <div class="settings-section">
+              <h4>Notes & records</h4>
+              <div class="toggle-row">Notes visible to patient by default <label class="toggle"><input type="checkbox" checked id="setNoteVisible"><span class="tslider"></span></label></div>
+              <div class="toggle-row">Require note before marking done <label class="toggle"><input type="checkbox"><span class="tslider"></span></label></div>
+            </div>
+            <div class="settings-section">
+              <h4>Display</h4>
+              <div class="toggle-row">Show vitals column in queue <label class="toggle"><input type="checkbox" checked><span class="tslider"></span></label></div>
+              <div class="toggle-row">Compact queue row height <label class="toggle"><input type="checkbox"><span class="tslider"></span></label></div>
+            </div>
+            <div class="form-group" style="margin-top:.5rem"><label>Doctor display name</label><input type="text" value="Dr. Ramesh K." id="setDocName"></div>
+            <div class="form-group"><label>Department</label><input type="text" value="General Physician" id="setDept"></div>
+            <button class="btn-primary" onclick="saveSettings()">Save settings</button>
+          </div>
+        </div>
+        <div class="card">
+          <div class="ch"><i class="ti ti-info-circle" aria-hidden="true"></i><span class="ch-title">System info</span></div>
+          <div class="cb" style="font-size:13px;line-height:2">
+            <div style="display:flex;justify-content:space-between"><span style="color:var(--color-text-secondary,#64748b)">Version</span><span>NoWait HMS v2.0</span></div>
+            <div style="display:flex;justify-content:space-between"><span style="color:var(--color-text-secondary,#64748b)">Module</span><span>Doctor Dashboard</span></div>
+            <div style="display:flex;justify-content:space-between"><span style="color:var(--color-text-secondary,#64748b)">Developed by</span><span>Auralith Bit</span></div>
+            <div style="display:flex;justify-content:space-between"><span style="color:var(--color-text-secondary,#64748b)">Date</span><span>June 14, 2026</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+<!-- NOTE MODAL (in-flow) -->
+<div id="noteModalWrap" style="display:none;position:absolute;inset:0;background:rgba(0,0,0,.4);z-index:150;align-items:center;justify-content:center;min-height:400px">
+  <div style="background:var(--color-background-primary,#fff);border-radius:14px;width:400px;overflow:hidden;border:.5px solid rgba(0,0,0,.1)">
+    <div style="padding:.875rem 1.125rem;border-bottom:.5px solid rgba(0,0,0,.08);display:flex;align-items:center;gap:7px">
+      <i class="ti ti-notes" style="font-size:17px;color:var(--g600)" aria-hidden="true"></i>
+      <span style="font-size:14px;font-weight:500;flex:1">Consultation note</span>
+      <button onclick="closeNote()" style="background:none;border:none;cursor:pointer;font-size:18px;display:flex;color:var(--color-text-secondary,#64748b)"><i class="ti ti-x" aria-hidden="true"></i></button>
+    </div>
+    <div style="padding:1rem 1.125rem">
+      <div style="background:var(--g50);border-radius:8px;padding:.625rem .875rem;margin-bottom:.875rem;font-size:13px">
+        <div style="font-weight:500" id="noteModalPt">—</div>
+        <div style="font-size:11px;color:var(--color-text-secondary,#64748b);margin-top:2px" id="noteModalMeta">—</div>
+      </div>
+      <div style="margin-bottom:.5rem"><label style="font-size:12px;color:var(--color-text-secondary,#64748b);font-weight:500;display:block;margin-bottom:4px">Diagnosis / findings</label>
+        <textarea id="noteDiag" style="width:100%;border:.5px solid rgba(0,0,0,.15);border-radius:7px;padding:.5rem .625rem;font-size:13px;font-family:inherit;resize:vertical;min-height:70px;background:var(--color-background-primary,#fff);color:var(--color-text-primary,#0f172a)" placeholder="Diagnosis, findings..."></textarea>
+      </div>
+      <div style="margin-bottom:.5rem"><label style="font-size:12px;color:var(--color-text-secondary,#64748b);font-weight:500;display:block;margin-bottom:4px">Prescription / advice</label>
+        <textarea id="notePrx" style="width:100%;border:.5px solid rgba(0,0,0,.15);border-radius:7px;padding:.5rem .625rem;font-size:13px;font-family:inherit;resize:vertical;min-height:55px;background:var(--color-background-primary,#fff);color:var(--color-text-primary,#0f172a)" placeholder="Medications, advice, follow-up..."></textarea>
+      </div>
+      <div style="display:flex;align-items:center;gap:6px;font-size:12px;color:var(--color-text-secondary,#64748b)">
+        <i class="ti ti-eye" style="font-size:13px" aria-hidden="true"></i> Visible to patient
+        <input type="checkbox" id="noteVis" checked style="accent-color:var(--g600);margin-left:2px">
+      </div>
+    </div>
+    <div style="padding:.75rem 1.125rem;border-top:.5px solid rgba(0,0,0,.08);display:flex;gap:.5rem;justify-content:flex-end">
+      <button class="btn-sec" onclick="closeNote()">Cancel</button>
+      <button class="btn-primary" onclick="saveNote()">Save note</button>
+    </div>
+  </div>
+</div>
+<!-- REFER TO DOCTOR MODAL -->
+<div id="referModalWrap" style="display:none;position:absolute;inset:0;background:rgba(0,0,0,.4);z-index:150;align-items:center;justify-content:center;min-height:400px">
+  <div style="background:var(--color-background-primary,#fff);border-radius:14px;width:400px;overflow:hidden;border:.5px solid rgba(0,0,0,.1)">
+    <div style="padding:.875rem 1.125rem;border-bottom:.5px solid rgba(0,0,0,.08);display:flex;align-items:center;gap:7px">
+      <i class="ti ti-arrow-forward-up" style="font-size:17px;color:var(--g600)" aria-hidden="true"></i>
+      <span style="font-size:14px;font-weight:500;flex:1">Refer to another doctor</span>
+      <button onclick="closeRefer()" style="background:none;border:none;cursor:pointer;font-size:18px;display:flex;color:var(--color-text-secondary,#64748b)"><i class="ti ti-x" aria-hidden="true"></i></button>
+    </div>
+    <div style="padding:1rem 1.125rem">
+      <div style="background:var(--g50);border-radius:8px;padding:.625rem .875rem;margin-bottom:.875rem;font-size:13px">
+        <div style="font-weight:500" id="referModalPt">—</div>
+        <div style="font-size:11px;color:var(--color-text-secondary,#64748b);margin-top:2px" id="referModalMeta">—</div>
+      </div>
+      <div class="form-group"><label>Refer to doctor</label>
+        <select id="referDoctor"></select>
+      </div>
+      <div class="form-group"><label>Reason for referral</label>
+        <textarea id="referReason" placeholder="Reason, suspected condition, urgency..."></textarea>
+      </div>
+    </div>
+    <div style="padding:.75rem 1.125rem;border-top:.5px solid rgba(0,0,0,.08);display:flex;gap:.5rem;justify-content:flex-end">
+      <button class="btn-sec" onclick="closeRefer()">Cancel</button>
+      <button class="btn-primary" onclick="saveRefer()">Save referral</button>
+    </div>
+  </div>
+</div>
+<script>
+const patients=[
+  {token:'T-01',name:'Arjun Thapa',age:45,gender:'Male',phone:'9841000001',complaint:'Chest pain evaluation',status:'done',note:'ECG normal. Advised stress test.',vitals:{bp:'130/85',pulse:88,temp:37.1,spo2:97,weight:72,height:170}},
+  {token:'T-02',name:'Meena Joshi',age:28,gender:'Female',phone:'9841000002',complaint:'Antenatal check-up',status:'done',note:'Vitamins prescribed. Next visit in 4 weeks.',vitals:{bp:'110/70',pulse:76,temp:36.8,spo2:99,weight:58,height:158}},
+  {token:'T-03',name:'Bikram Rai',age:62,gender:'Male',phone:'9841000003',complaint:'Diabetes follow-up',status:'done',note:'HbA1c improved. Continue Metformin.',vitals:{bp:'140/90',pulse:80,temp:37.0,spo2:96,weight:78,height:165}},
+  {token:'T-04',name:'Sunita Sharma',age:34,gender:'Female',phone:'9841000004',complaint:'Fever & body ache since 3 days',status:'inprogress',note:'',vitals:{bp:'118/76',pulse:95,temp:38.4,spo2:98,weight:55,height:160}},
+  {token:'T-05',name:'Kamal Gurung',age:19,gender:'Male',phone:'9841000005',complaint:'Skin allergy, itching',status:'waiting',note:'',vitals:{}},
+  {token:'T-06',name:'Rita Pandey',age:51,gender:'Female',phone:'9841000006',complaint:'Joint pain, knee',status:'waiting',note:'',vitals:{}},
+  {token:'T-07',name:'Hari Koirala',age:38,gender:'Male',phone:'9841000007',complaint:'Headache & migraine',status:'waiting',note:'',vitals:{}},
+  {token:'T-08',name:'Puja Shrestha',age:7,gender:'Female',phone:'9841000008',complaint:'Cough & cold',status:'waiting',note:'',vitals:{}},
+  {token:'T-09',name:'Deepak Lama',age:55,gender:'Male',phone:'9841000009',complaint:'BP monitoring',status:'waiting',note:'',vitals:{}},
+  {token:'T-10',name:'Anita Magar',age:43,gender:'Female',phone:'9841000010',complaint:'Thyroid follow-up',status:'waiting',note:'',vitals:{}},
+  {token:'T-11',name:'Sanjay Adhikari',age:29,gender:'Male',phone:'9841000011',complaint:'Back pain, lumbar',status:'skipped',note:'',vitals:{}},
+  {token:'T-12',name:'Gita Tamang',age:66,gender:'Female',phone:'9841000012',complaint:'Eye vision complaint',status:'waiting',note:'',vitals:{}},
+];
+const history=[
+  {date:'13 Jun',token:'T-07',name:'Ram Bahadur',complaint:'Hypertension',diag:'Stage 1 HTN',rx:'Amlodipine 5mg OD'},
+  {date:'13 Jun',token:'T-12',name:'Sita Devi',complaint:'Cough > 2 weeks',diag:'URTI',rx:'Amoxicillin 500mg TDS x5 days'},
+  {date:'12 Jun',token:'T-03',name:'Gopal KC',complaint:'Diabetes check',diag:'T2DM controlled',rx:'Continue Metformin'},
+  {date:'11 Jun',token:'T-09',name:'Maya Tharu',complaint:'Abdominal pain',diag:'Gastritis',rx:'Omeprazole 20mg BD'},
+  {date:'10 Jun',token:'T-05',name:'Binod Gharti',complaint:'Fever',diag:'Viral fever',rx:'Paracetamol 500mg SOS'},
+];
+const notifs=[
+  {icon:'ti-alert-triangle',cls:'ni-red',text:'Token T-09 Deepak Lama waiting > 45 min',time:'10 min ago'},
+  {icon:'ti-user-plus',cls:'ni-green',text:'New walk-in patient registered: Puja Shrestha (T-08)',time:'22 min ago'},
+  {icon:'ti-activity',cls:'ni-amber',text:'High temperature alert: Sunita Sharma — 38.4°C',time:'35 min ago'},
+  {icon:'ti-clock',cls:'ni-blue',text:'Your afternoon session starts at 2:00 PM',time:'1 hr ago'},
+  {icon:'ti-check',cls:'ni-green',text:'Morning queue 25% complete — 3 of 12 tokens done',time:'2 hrs ago'},
+];
+let curIdx=3;let timerSec=0;let timerInt=null;let noteTarget=null;
+const sLabel={done:'Done',inprogress:'In Progress',waiting:'Waiting',skipped:'Skipped',noshow:'No Show',hold:'On Hold',referred:'Referred',cancelled:'Cancelled'};
+const sBadge={done:'bg',inprogress:'bb',waiting:'bs',skipped:'ba',noshow:'br',hold:'ba',referred:'bp',cancelled:'br'};
+const doctorsList=['Dr. Anita Verma — Pediatrics','Dr. Suresh Lama — Orthopedics','Dr. Kabita Rai — Gynecology','Dr. Bishal Thapa — ENT','Dr. Prakash Shrestha — Cardiology','Dr. Manisha Gurung — Dermatology'];
+const MIN_SLOT_SEC=20*60;
+const EARLY_FINISH_SEC=10*60;
+let referTarget=null;
+function updateNotifBadge(){const b=document.getElementById('notifBadge');if(b)b.textContent=notifs.length;}
+function addNotif(icon,cls,text){notifs.unshift({icon,cls,text,time:'Just now'});updateNotifBadge();const np=document.getElementById('page-notifications');if(np&&np.classList.contains('active'))renderNotifs();}
+function checkEarlyFinish(){
+  const p=patients[curIdx];if(!p)return;
+  if(timerSec>0&&timerSec<EARLY_FINISH_SEC){
+    const m=String(Math.floor(timerSec/60)).padStart(2,'0'),s=String(timerSec%60).padStart(2,'0');
+    addNotif('ti-alert-triangle','ni-amber','Dr. Ramesh finished '+p.name+' ('+p.token+') in '+m+':'+s+' — under the 20-min minimum slot. Receptionist notified to prep next patient.');
+    toast('Consult finished early — receptionist notified');
+  }
+}
+function toast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2800)}
+function showTab(id,sideEl){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.sitem').forEach(s=>s.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  document.getElementById('tab-'+id).classList.add('active');
+  if(sideEl)sideEl.classList.add('active');
+  else{const s=document.querySelector(`.sitem[onclick*="'${id}'"]`);if(s)s.classList.add('active');}
+  const titles={queue:'Today\'s Token Queue',register:'Register Patient',vitals:'Record Vitals',patients:'Patient Directory',history:'Visit History',schedule:'Schedule View',notifications:'Notifications',settings:'Settings'};
+  document.getElementById('pageTitle').textContent=titles[id]||id;
+  if(id==='patients')renderPatients();
+  if(id==='history')renderHistory();
+  if(id==='schedule')renderSchedule();
+  if(id==='notifications')renderNotifs();
+  if(id==='vitals')populateVitalSelect();
+  if(id==='register')renderRegList();
+}
+function renderQueue(){
+  const tb=document.getElementById('queueBody');
+  tb.innerHTML=patients.map((p,i)=>`<tr class="${p.status==='inprogress'?'cur':''}${p.status==='cancelled'?' cancelled-row':''}">
+    <td><div class="tnum${p.status==='inprogress'?' cur':''}">${p.token.replace('T-','')}</div></td>
+    <td><div class="pname">${p.name}</div><div class="pmeta">${p.status==='referred'?'<i class="ti ti-arrow-forward-up" style="font-size:11px;color:#6b21a8"></i> Referred to '+(p.referredTo||'—'):p.note?'<i class="ti ti-note" style="font-size:11px;color:var(--g600)"></i> Note':'No note'}</div></td>
+    <td style="font-size:12px">${p.age}y / ${p.gender?p.gender[0]:'?'}</td>
+    <td style="font-size:12px;max-width:130px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${p.complaint}</td>
+    <td>${p.vitals&&p.vitals.bp?`<span class="bdg bg" style="font-size:10px">${p.vitals.temp?p.vitals.temp+'°C':'—'}</span>`:'<span style="color:var(--color-text-secondary,#64748b);font-size:11px">Pending</span>'}</td>
+    <td><span class="bdg ${sBadge[p.status]}">${sLabel[p.status]}</span></td>
+    <td><div class="abts">
+      <button class="ab g" onclick="openNoteModal(${i})" title="Note"><i class="ti ti-pencil" style="font-size:12px"></i></button>
+      ${p.status==='waiting'?`<button class="ab" onclick="setStatus(${i},'inprogress')" title="Start"><i class="ti ti-player-play" style="font-size:12px"></i></button>`:''}
+      ${p.status!=='done'&&p.status!=='noshow'&&p.status!=='cancelled'&&p.status!=='referred'?`<button class="ab" onclick="setStatus(${i},'done')" title="Done"><i class="ti ti-check" style="font-size:12px"></i></button>`:''}
+      ${p.status!=='done'&&p.status!=='cancelled'&&p.status!=='referred'&&p.status!=='noshow'?`<button class="ab" onclick="openReferModal(${i})" title="Refer to another doctor"><i class="ti ti-arrow-forward-up" style="font-size:12px"></i></button><button class="ab" onclick="cancelToken(${i})" title="Cancel token"><i class="ti ti-circle-x" style="font-size:12px;color:#dc2626"></i></button>`:''}
+      <button class="ab" onclick="viewVitals(${i})" title="Vitals"><i class="ti ti-activity" style="font-size:12px"></i></button>
+    </div></td>
+  </tr>`).join('');
+  updateStats();
+}
+function updateStats(){
+  const done=patients.filter(p=>p.status==='done').length;
+  const wait=patients.filter(p=>p.status==='waiting').length;
+  const skip=patients.filter(p=>p.status==='skipped'||p.status==='noshow').length;
+  document.getElementById('sDone').textContent=done;
+  document.getElementById('sWait').textContent=wait;
+  document.getElementById('sSkip').textContent=skip;
+  document.getElementById('sEst').textContent='~'+Math.round(wait*10)+'m';
+  document.getElementById('totalBdg').textContent=patients.length+' Tokens';
+  const pct=Math.round(done/patients.length*100);
+  document.getElementById('progPct').textContent=pct+'%';
+  document.getElementById('progFill').style.width=pct+'%';
+}
+function updateCP(){
+  const c=patients[curIdx];if(!c)return;
+  document.getElementById('cpTok').textContent=c.token;
+  document.getElementById('cpName').textContent=c.name;
+  document.getElementById('cpCC').textContent=c.complaint;
+}
+function startTimer(){clearInterval(timerInt);timerSec=0;timerInt=setInterval(()=>{timerSec++;const m=String(Math.floor(timerSec/60)).padStart(2,'0'),s=String(timerSec%60).padStart(2,'0');document.getElementById('timerDisp').textContent=m+':'+s;},1000);}
+function callNext(){
+  checkEarlyFinish();
+  patients[curIdx].status='done';
+  let nx=patients.findIndex((p,i)=>i>curIdx&&p.status==='waiting');
+  if(nx===-1){toast('All tokens completed!');clearInterval(timerInt);renderQueue();return;}
+  curIdx=nx;patients[curIdx].status='inprogress';updateCP();startTimer();renderQueue();toast('Called: '+patients[curIdx].name+' ('+patients[curIdx].token+')');
+}
+function holdToken(){patients[curIdx].status='hold';renderQueue();toast('Token placed on hold');}
+function skipToken(){patients[curIdx].status='skipped';callNext();}
+function markNoShow(){patients[curIdx].status='noshow';toast('Marked as no-show');callNext();}
+function markDone(){checkEarlyFinish();patients[curIdx].status='done';let nx=patients.findIndex((p,i)=>i>curIdx&&p.status==='waiting');if(nx===-1){toast('Queue complete!');clearInterval(timerInt);renderQueue();return;}curIdx=nx;patients[curIdx].status='inprogress';updateCP();startTimer();renderQueue();toast('Marked done, called next');}
+function setStatus(i,s){patients[i].status=s;if(s==='inprogress'){curIdx=i;updateCP();startTimer();}renderQueue();}
+function reorderQueue(){const w=patients.filter(p=>p.status==='waiting');toast('Re-ordered '+w.length+' waiting tokens by priority');}
+function addEmergency(){
+  const n=prompt('Emergency patient name:');if(!n)return;
+  const t='T-E'+(patients.filter(p=>p.token.startsWith('T-E')).length+1);
+  patients.splice(curIdx+1,0,{token:t,name:n,age:'?',gender:'?',phone:'—',complaint:'EMERGENCY',status:'waiting',note:'',vitals:{}});
+  renderQueue();toast('Emergency token '+t+' added');
+}
+function openNoteModal(i){
+  noteTarget=i!==null?i:curIdx;
+  const p=patients[noteTarget];
+  document.getElementById('noteModalPt').textContent=p.name;
+  document.getElementById('noteModalMeta').textContent=p.token+' · Age '+p.age+' · '+p.complaint;
+  const parts=p.note?p.note.split('|'):['',''];
+  document.getElementById('noteDiag').value=parts[0]||'';
+  document.getElementById('notePrx').value=parts[1]||'';
+  const wrap=document.getElementById('noteModalWrap');wrap.style.display='flex';
+}
+function closeNote(){document.getElementById('noteModalWrap').style.display='none';}
+function saveNote(){
+  if(noteTarget!==null){
+    patients[noteTarget].note=document.getElementById('noteDiag').value+'|'+document.getElementById('notePrx').value;
+    renderQueue();closeNote();toast('Note saved for '+patients[noteTarget].name);
+  }
+}
+function viewVitals(i){showTab('vitals',null);setTimeout(()=>{const sel=document.getElementById('vitalPatient');sel.value=i;showVitals(i);},100);}
+function openReferModal(i){
+  referTarget=i!==null?i:curIdx;
+  const p=patients[referTarget];
+  document.getElementById('referModalPt').textContent=p.name;
+  document.getElementById('referModalMeta').textContent=p.token+' · Age '+p.age+' · '+p.complaint;
+  const sel=document.getElementById('referDoctor');
+  sel.innerHTML=doctorsList.map(d=>`<option value="${d}">${d}</option>`).join('');
+  document.getElementById('referReason').value=p.referReason||'';
+  document.getElementById('referModalWrap').style.display='flex';
+}
+function closeRefer(){document.getElementById('referModalWrap').style.display='none';}
+function saveRefer(){
+  if(referTarget===null)return;
+  const p=patients[referTarget];
+  const doc=document.getElementById('referDoctor').value;
+  const reason=document.getElementById('referReason').value.trim();
+  if(!reason){toast('Please add a reason for referral');return;}
+  const wasCurrent=referTarget===curIdx;
+  if(wasCurrent)checkEarlyFinish();
+  p.status='referred';
+  p.referredTo=doc;
+  p.referReason=reason;
+  if(wasCurrent){
+    let nx=patients.findIndex((pp,i)=>i>curIdx&&pp.status==='waiting');
+    if(nx!==-1){curIdx=nx;patients[curIdx].status='inprogress';updateCP();startTimer();}
+    else{clearInterval(timerInt);}
+  }
+  renderQueue();closeRefer();toast(p.name+' referred to '+doc);
+  addNotif('ti-arrow-forward-up','ni-blue',p.name+' ('+p.token+') referred to '+doc+' by Dr. Ramesh — reason: '+reason);
+}
+function cancelToken(i){
+  const idx=i!==null?i:curIdx;
+  const p=patients[idx];
+  if(!confirm('Cancel token '+p.token+' for '+p.name+'? This cannot be undone.'))return;
+  const wasCurrent=idx===curIdx;
+  if(wasCurrent)checkEarlyFinish();
+  p.status='cancelled';
+  if(wasCurrent){
+    let nx=patients.findIndex((pp,i2)=>i2>curIdx&&pp.status==='waiting');
+    if(nx!==-1){curIdx=nx;patients[curIdx].status='inprogress';updateCP();startTimer();}
+    else{clearInterval(timerInt);}
+  }
+  renderQueue();toast('Token '+p.token+' cancelled');
+  addNotif('ti-circle-x','ni-red',p.name+' ('+p.token+') appointment cancelled by Dr. Ramesh');
+}
+function registerPatient(){
+  const name=document.getElementById('regName').value.trim();
+  const age=document.getElementById('regAge').value;
+  if(!name||!age){toast('Name and age required');return;}
+  const tNum=patients.length+1;
+  const tok='T-'+String(tNum).padStart(2,'0');
+  const type=document.getElementById('regType').value;
+  const p={token:tok,name,age:parseInt(age),gender:document.getElementById('regGender').value,phone:document.getElementById('regPhone').value||'—',complaint:document.getElementById('regCC').value||'General consultation',status:type==='emergency'?'waiting':type==='priority'?'waiting':'waiting',note:'',vitals:{}};
+  if(type==='emergency'){patients.splice(curIdx+1,0,p);}else{patients.push(p);}
+  renderQueue();renderRegList();clearRegForm();toast('Registered '+name+' as '+tok);
+}
+function clearRegForm(){['regName','regAge','regPhone','regCC','regAddr'].forEach(id=>document.getElementById(id).value='');document.getElementById('regGender').value='Male';document.getElementById('regType').value='normal';}
+function renderRegList(){
+  const el=document.getElementById('regList');
+  if(!el)return;
+  el.innerHTML=patients.slice().reverse().map(p=>`<div class="history-item"><div class="hdate">${p.token}</div><div class="hcontent"><div class="htitle">${p.name} <span class="bdg ${sBadge[p.status]}" style="font-size:10px;padding:1px 6px">${sLabel[p.status]}</span></div><div class="hdesc">${p.age}y · ${p.complaint}</div></div></div>`).join('');
+}
+function populateVitalSelect(){
+  const sel=document.getElementById('vitalPatient');
+  sel.innerHTML=patients.map((p,i)=>`<option value="${i}">${p.token} — ${p.name}</option>`).join('');
+  sel.onchange=()=>showVitals(parseInt(sel.value));
+  showVitals(curIdx);sel.value=curIdx;
+}
+function showVitals(i){
+  const p=patients[i];document.getElementById('vPatientName').textContent=p.name;
+  const v=p.vitals||{};
+  const bmi=v.weight&&v.height?Math.round(v.weight/(v.height/100)**2*10)/10:'—';
+  const cells=[
+    {val:v.bp||'—',lbl:'BP (mmHg)',warn:v.bp&&parseInt(v.bp)>140,danger:v.bp&&parseInt(v.bp)>160},
+    {val:v.pulse||'—',lbl:'Pulse (bpm)',warn:v.pulse>100||v.pulse<60,danger:v.pulse>120},
+    {val:v.temp||'—',lbl:'Temp (°C)',warn:v.temp>37.5,danger:v.temp>38.5},
+    {val:v.spo2||'—',lbl:'SpO2 (%)',warn:v.spo2<95,danger:v.spo2<90},
+    {val:v.weight||'—',lbl:'Weight (kg)',warn:false,danger:false},
+    {val:bmi,lbl:'BMI',warn:bmi>25&&bmi!=='—',danger:bmi>30&&bmi!=='—'},
+  ];
+  document.getElementById('vitalsDisplay').innerHTML=cells.map(c=>`<div class="vcard${c.danger?' danger':c.warn?' warn':''}"><div class="vval">${c.val}</div><div class="vlbl">${c.lbl}</div></div>`).join('');
+  const alerts=[];
+  if(v.temp>38)alerts.push('<div class="bdg br" style="margin-bottom:4px;font-size:12px"><i class="ti ti-alert-triangle" style="font-size:13px;vertical-align:-2px"></i> Fever: '+v.temp+'°C — consider antipyretic</div>');
+  if(v.spo2&&v.spo2<95)alerts.push('<div class="bdg br" style="margin-bottom:4px;font-size:12px"><i class="ti ti-alert-triangle" style="font-size:13px;vertical-align:-2px"></i> Low SpO2: '+v.spo2+'% — monitor closely</div>');
+  if(v.bp&&parseInt(v.bp)>140)alerts.push('<div class="bdg ba" style="margin-bottom:4px;font-size:12px"><i class="ti ti-alert-circle" style="font-size:13px;vertical-align:-2px"></i> Elevated BP: '+v.bp+' mmHg</div>');
+  document.getElementById('vitalsAlerts').innerHTML=alerts.join('');
+}
+function saveVitals(){
+  const sel=document.getElementById('vitalPatient');
+  const i=parseInt(sel.value);
+  patients[i].vitals={bp:document.getElementById('vBP').value,pulse:parseInt(document.getElementById('vPulse').value)||0,temp:parseFloat(document.getElementById('vTemp').value)||0,spo2:parseInt(document.getElementById('vSpo2').value)||0,weight:parseFloat(document.getElementById('vWeight').value)||0,height:parseInt(document.getElementById('vHeight').value)||0,rbs:parseInt(document.getElementById('vRBS').value)||0};
+  showVitals(i);renderQueue();toast('Vitals saved for '+patients[i].name);
+}
+function clearVitals(){['vBP','vPulse','vTemp','vSpo2','vWeight','vHeight','vRBS'].forEach(id=>document.getElementById(id).value='');}
+function filterPatients(){
+  const q=(document.getElementById('pSearch').value||'').toLowerCase();
+  renderPatients(q);
+}
+function renderPatients(q=''){
+  const list=document.getElementById('patientList');if(!list)return;
+  const filtered=q?patients.filter(p=>p.name.toLowerCase().includes(q)||p.complaint.toLowerCase().includes(q)||p.phone.includes(q)):patients;
+  list.innerHTML=filtered.map((p,i)=>`<div class="pcard">
+    <div class="pav">${p.name.split(' ').map(w=>w[0]).join('').slice(0,2)}</div>
+    <div class="pinfo"><div class="pn">${p.name} <span class="bdg ${sBadge[p.status]}" style="font-size:10px;padding:1px 5px">${sLabel[p.status]}</span></div>
+    <div class="pm">${p.token} · ${p.age}y · ${p.gender} · ${p.phone} · ${p.complaint}</div></div>
+    <div class="pacts">
+      <button class="ab g" onclick="openNoteModal(${patients.indexOf(p)})" title="Note"><i class="ti ti-pencil" style="font-size:12px"></i></button>
+      <button class="ab" onclick="viewVitals(${patients.indexOf(p)})" title="Vitals"><i class="ti ti-activity" style="font-size:12px"></i></button>
+    </div>
+  </div>`).join('');
+}
+function renderHistory(){
+  document.getElementById('historyList').innerHTML=history.map(h=>`<div class="history-item">
+    <div class="hdate">${h.date}<br><span style="color:var(--color-text-secondary,#64748b);font-size:10px">${h.token}</span></div>
+    <div class="hcontent"><div class="htitle">${h.name} <span style="color:var(--color-text-secondary,#64748b);font-weight:400;font-size:12px">— ${h.complaint}</span></div>
+    <div class="hdesc"><i class="ti ti-stethoscope" style="font-size:11px;vertical-align:-1px"></i> ${h.diag} &nbsp;|&nbsp; <i class="ti ti-pill" style="font-size:11px;vertical-align:-1px"></i> ${h.rx}</div></div>
+  </div>`).join('');
+}
+function renderSchedule(){
+  const times=['09:00','09:10','09:20','09:30','09:40','09:50','10:00','10:10','10:20','10:30','10:40','10:50'];
+  document.getElementById('scheduleList').innerHTML=patients.slice(0,12).map((p,i)=>`<div class="sched-row">
+    <div class="stime">${times[i]||'—'}</div>
+    <div><div class="sinfo">${p.name}</div><div class="smeta">${p.complaint}</div></div>
+    <span class="bdg ${sBadge[p.status]}">${sLabel[p.status]}</span>
+  </div>`).join('');
+}
+function renderNotifs(){
+  document.getElementById('notifList').innerHTML=notifs.map(n=>`<div class="notif-item">
+    <div class="notif-icon ${n.cls}"><i class="ti ${n.icon}"></i></div>
+    <div class="notif-text">${n.text}</div>
+    <div class="notif-time">${n.time}</div>
+  </div>`).join('');
+}
+function clearNotifs(){document.getElementById('notifList').innerHTML='<div style="padding:1.5rem;text-align:center;color:var(--color-text-secondary,#64748b);font-size:13px">No notifications</div>';toast('All notifications cleared');}
+function updateSlot(){
+  let v=parseInt(document.getElementById('slotDurInput').value)||20;
+  if(v<20){v=20;document.getElementById('slotDurInput').value=20;toast('Minimum consult slot is 20 minutes');}
+  else{toast('Slot duration updated to '+v+' min');}
+  document.getElementById('slotMin').textContent=v;
+}
+function saveSchedule(){toast('Schedule saved');}
+function saveSettings(){toast('Settings saved');}
+function printQueue(){window.print&&window.print();toast('Printing queue...');}
+function toggleTheme(){
+  const html=document.documentElement;
+  const next=html.getAttribute('data-theme')==='dark'?'light':'dark';
+  html.setAttribute('data-theme',next);
+  document.getElementById('themeIcon').className=next==='dark'?'ti ti-sun':'ti ti-moon';
+  document.getElementById('themeLabel').textContent=next==='dark'?'Light':'Dark';
+  toast(next==='dark'?'Dark mode enabled':'Light mode enabled');
+}
+function cycleStatus(){
+  const btn=document.getElementById('docStatusBtn');
+  const states=['Available','On Break','Unavailable'];
+  const bgs=['var(--g400)','#fcd34d','#fca5a5'];
+  const cols=['var(--g900)','#92400e','#991b1b'];
+  let i=states.indexOf(btn.textContent);i=(i+1)%3;
+  btn.textContent=states[i];btn.style.background=bgs[i];btn.style.color=cols[i];
+  toast('Status: '+states[i]);
+}
+renderQueue();updateCP();startTimer();updateNotifBadge();
+</script>
+</body>
+</html>
