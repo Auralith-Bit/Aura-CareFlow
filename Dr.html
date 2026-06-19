@@ -209,7 +209,7 @@ body{font-family:var(--font-sans,system-ui,sans-serif);background:var(--color-ba
       <div class="tagline">Care FLow</div>
     </div>
     <nav class="snav">
-      <div class="snav-label">Consultation</div>
+      <div class="snav-label">Main</div>
       <div class="sitem active" onclick="showTab('queue',this)"><i class="ti ti-layout-list" aria-hidden="true"></i> Today's Queue</div>
       <div class="sitem" onclick="showTab('register',this)"><i class="ti ti-user-plus" aria-hidden="true"></i> Register Patient</div>
       <div class="sitem" onclick="showTab('vitals',this)"><i class="ti ti-activity" aria-hidden="true"></i> Record Vitals</div>
@@ -807,7 +807,6 @@ function toggleTheme(){
   html.setAttribute('data-theme',next);
   document.getElementById('themeIcon').className=next==='dark'?'ti ti-sun':'ti ti-moon';
   document.getElementById('themeLabel').textContent=next==='dark'?'Light':'Dark';
-  toast(next==='dark'?'Dark mode enabled':'Light mode enabled');
 }
 function cycleStatus(){
   const btn=document.getElementById('docStatusBtn');
