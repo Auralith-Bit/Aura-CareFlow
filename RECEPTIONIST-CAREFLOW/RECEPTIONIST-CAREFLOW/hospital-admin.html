@@ -782,183 +782,6 @@
   .breadcrumb span { color: var(--green-main); }
 
   @media(max-width:900px){ .doctor-grid{ grid-template-columns: repeat(2,1fr); } .dept-grid{ grid-template-columns: repeat(2,1fr); } .stats-row{ grid-template-columns: repeat(2,1fr); } }
-
-  /* ═══ NEW DASHBOARD STYLES ══════════════════════════════ */
-
-  /* Hero banner */
-  .dash-hero {
-    background: linear-gradient(135deg, var(--green-dark) 0%, var(--green-mid) 60%, #40a07a 100%);
-    border-radius: 20px;
-    padding: 28px 32px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 22px;
-    color: white;
-    position: relative;
-    overflow: hidden;
-    box-shadow: 0 6px 28px rgba(26,61,43,0.28);
-  }
-  .dash-hero::before {
-    content:'';
-    position:absolute;
-    right:-60px;top:-60px;
-    width:260px;height:260px;
-    border-radius:50%;
-    background:radial-gradient(circle,rgba(255,255,255,0.08) 0%,transparent 70%);
-    pointer-events:none;
-  }
-  .dash-hero::after {
-    content:'';
-    position:absolute;
-    left:200px;bottom:-80px;
-    width:200px;height:200px;
-    border-radius:50%;
-    background:radial-gradient(circle,rgba(82,183,136,0.18) 0%,transparent 70%);
-    pointer-events:none;
-  }
-  .dash-greeting { font-size:13px; color:rgba(255,255,255,0.6); font-weight:500; letter-spacing:0.3px; margin-bottom:4px; }
-  .dash-name { font-size:26px; font-weight:900; color:#fff; margin-bottom:6px; letter-spacing:-0.5px; }
-  .dash-sub { font-size:13px; color:rgba(255,255,255,0.7); }
-  .dash-hero-stats { text-align:right; }
-  .hero-live-pill {
-    display:inline-flex;align-items:center;gap:6px;
-    background:rgba(255,255,255,0.12);
-    border:1px solid rgba(255,255,255,0.2);
-    border-radius:20px;padding:4px 12px;
-    font-size:11px;color:rgba(255,255,255,0.8);
-    margin-bottom:8px;
-  }
-  .live-dot { width:7px;height:7px;border-radius:50%;background:#7fffbf;animation:pulse 1.8s infinite; }
-  .hero-big-num { font-size:54px;font-weight:900;color:#fff;line-height:1;letter-spacing:-2px; }
-  .hero-big-label { font-size:13px;color:rgba(255,255,255,0.65);margin-top:4px; }
-  .hero-mini-trend { font-size:11.5px;color:rgba(255,255,255,0.55);margin-top:3px; }
-
-  /* KPI Cards */
-  .kpi-row {
-    display:grid;
-    grid-template-columns:repeat(5,1fr);
-    gap:14px;
-    margin-bottom:22px;
-  }
-  .kpi-card {
-    background:var(--white);
-    border-radius:16px;
-    padding:16px;
-    box-shadow:var(--shadow-sm);
-    border:1px solid var(--gray-200);
-    position:relative;
-    overflow:hidden;
-    transition:transform 0.18s,box-shadow 0.18s;
-    cursor:pointer;
-    display:flex;
-    flex-direction:column;
-    gap:10px;
-  }
-  .kpi-card:hover { transform:translateY(-3px);box-shadow:var(--shadow-md); }
-  .kpi-icon-wrap {
-    width:38px;height:38px;border-radius:10px;
-    display:flex;align-items:center;justify-content:center;font-size:18px;
-  }
-  .kpi-icon-green { background:#d8f3dc; }
-  .kpi-icon-blue  { background:#e3f2fd; }
-  .kpi-icon-orange{ background:#fff3e0; }
-  .kpi-icon-red   { background:#ffeaea; }
-  .kpi-icon-purple{ background:#f3e5f5; }
-  .kpi-body { flex:1; }
-  .kpi-label { font-size:10.5px;font-weight:700;color:var(--gray-500);text-transform:uppercase;letter-spacing:0.6px;margin-bottom:3px; }
-  .kpi-value { font-size:26px;font-weight:900;color:var(--gray-800);line-height:1;letter-spacing:-0.5px; }
-  .kpi-sub   { font-size:11px;font-weight:600;margin-top:3px; }
-  .kpi-sub-green  { color:#3a8c64; }
-  .kpi-sub-blue   { color:#4361ee; }
-  .kpi-sub-orange { color:#e65100; }
-  .kpi-sub-red    { color:#e63946; }
-  .kpi-sub-purple { color:#7b2d8b; }
-  .kpi-sparkline { position:absolute;bottom:12px;right:10px;opacity:0.7; }
-  .kpi-card.kpi-green { border-top:3px solid #52b788; }
-  .kpi-card.kpi-blue  { border-top:3px solid #4361ee; }
-  .kpi-card.kpi-orange{ border-top:3px solid #f4a261; }
-  .kpi-card.kpi-red   { border-top:3px solid #e63946; }
-  .kpi-card.kpi-purple{ border-top:3px solid #7b2d8b; }
-
-  /* Charts row */
-  .dash-charts-row {
-    display:grid;
-    grid-template-columns:1.55fr 1fr;
-    gap:18px;
-    margin-bottom:18px;
-    align-items:start;
-  }
-  .dash-chart-main {}
-  .dash-right-col { display:flex;flex-direction:column;gap:0; }
-
-  /* OPD chart */
-  .opd-chart-wrap { display:flex;flex-direction:column;gap:0; }
-  .opd-bar { transition:opacity 0.2s; cursor:pointer; }
-  .opd-bar:hover { opacity:0.82; }
-  .opd-bar-peak { filter:drop-shadow(0 0 8px rgba(244,162,97,0.5)); }
-  .opd-chart-footer {
-    display:flex;gap:12px;flex-wrap:wrap;margin-top:10px;
-    padding-top:10px;border-top:1px solid var(--gray-100);
-  }
-  .opd-summary-pill {
-    display:inline-flex;align-items:center;gap:5px;
-    background:var(--gray-100);border-radius:20px;
-    padding:4px 12px;font-size:12px;color:var(--gray-600);
-  }
-  .opd-summary-pill strong { color:var(--gray-800); }
-  .legend-pill {
-    display:inline-flex;align-items:center;gap:4px;
-    padding:3px 10px;border-radius:12px;
-    font-size:11px;font-weight:600;
-  }
-
-  /* Dept load */
-  .dept-load-row {
-    display:flex;align-items:center;gap:8px;
-  }
-  .dept-load-dot { width:8px;height:8px;border-radius:50%;flex-shrink:0; }
-  .dept-load-name { font-size:12px;font-weight:600;color:var(--gray-700);min-width:90px; }
-  .dept-load-bar-wrap { flex:1;height:7px;background:var(--gray-100);border-radius:10px;overflow:hidden; }
-  .dept-load-bar { height:100%;border-radius:10px;transition:width 0.6s ease; }
-  .dept-load-num { font-size:12px;font-weight:700;min-width:24px;text-align:right; }
-
-  /* Bottom row */
-  .dash-bottom-row {
-    display:grid;
-    grid-template-columns:1fr 1fr 1fr;
-    gap:18px;
-    margin-bottom:18px;
-  }
-
-  /* Quick metrics improved */
-  .qm-grid { display:grid;grid-template-columns:repeat(4,1fr);gap:0; }
-  .qm-cell { padding:18px 16px;display:flex;flex-direction:column;align-items:flex-start;gap:4px; }
-  .qm-icon { width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:16px;margin-bottom:6px; }
-  .qm-label { font-size:11px;font-weight:700;color:var(--gray-500);text-transform:uppercase;letter-spacing:0.5px; }
-  .qm-value { font-size:24px;font-weight:900;color:var(--gray-800);line-height:1;letter-spacing:-0.5px; }
-  .qm-unit { font-size:13px;font-weight:600;color:var(--gray-400); }
-  .qm-trend { font-size:11.5px;font-weight:600; }
-
-  /* Doctor duty rows */
-  .duty-row { display:flex;align-items:center;gap:10px;padding:7px 0;border-bottom:1px solid var(--gray-100); }
-  .duty-row:last-child { border-bottom:none; }
-  .duty-avatar { width:33px;height:33px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:11px;color:white;flex-shrink:0; }
-  .duty-info { flex:1; }
-  .duty-name { font-size:12.5px;font-weight:700;color:var(--gray-800); }
-  .duty-dept { font-size:11px;color:var(--gray-500); }
-  .duty-badge { font-size:10.5px;font-weight:700;white-space:nowrap; }
-  .duty-on    { color:#3a8c64; }
-  .duty-break { color:#e65100; }
-  .duty-off   { color:var(--gray-400); }
-  .duty-queue { font-size:11px;font-weight:600;color:var(--gray-600);white-space:nowrap; }
-
-  /* Activity feed */
-  .activity-item { display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:1px solid var(--gray-100); }
-  .activity-dot { width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:4px; }
-  .activity-body { flex:1; }
-  .activity-text { font-size:12.5px;color:var(--gray-700); }
-  .activity-time { font-size:11px;color:var(--gray-400);margin-top:2px; }
 </style>
 </head>
 <body>
@@ -972,7 +795,7 @@
       <div class="logo-sub">Hospital Admin</div>
     </div>
   </div>
-  <div class="role-pill">Super Admin</div>
+  <div class="role-pill">Hospital Admin</div>
 
   <div class="nav-section">Overview</div>
   <div class="nav-item active" onclick="setNav(this,'dashboard')"><span class="icon">📊</span> Dashboard</div>
@@ -1019,354 +842,100 @@
   <!-- CONTENT -->
   <div class="content">
 
-    <!--  DASHBOARD -->
+    <!-- DASHBOARD -->
     <div id="view-dashboard" class="view active">
-
-      <!-- Hero welcome banner -->
-      <div class="dash-hero">
-        <div class="dash-hero-text">
-          <div class="dash-greeting" id="dash-greeting">Good morning</div>
-          <h1 class="dash-name">Dr. Admin 👋</h1>
-          <p class="dash-sub">Here's what's happening at <strong>City Care Medical Centre</strong> today.</p>
+      <div class="stats-row">
+        <div class="stat-card green">
+          <div class="stat-label">Total Doctors</div>
+          <div class="stat-value">8</div>
+          <div class="stat-sub">Across 6 departments</div>
+          <div class="stat-icon">👨‍⚕️</div>
+          <div class="stat-card::after"></div>
         </div>
-        <div class="dash-hero-stats">
-          <div class="hero-live-pill"><span class="live-dot"></span> Live · Updated just now</div>
-          <div class="hero-big-num" id="hero-opd-count">127</div>
-          <div class="hero-big-label">patients seen today</div>
-          <div class="hero-mini-trend">↑ 12% vs yesterday · Peak: 10–12 AM</div>
+        <div class="stat-card blue">
+          <div class="stat-label">Staff Accounts</div>
+          <div class="stat-value">14</div>
+          <div class="stat-sub">3 roles assigned</div>
+          <div class="stat-icon">👥</div>
         </div>
-      </div>
-
-      <!-- KPI Cards row -->
-      <div class="kpi-row">
-        <div class="kpi-card kpi-green">
-          <div class="kpi-icon-wrap kpi-icon-green">👨‍⚕️</div>
-          <div class="kpi-body">
-            <div class="kpi-label">Active Doctors</div>
-            <div class="kpi-value">8</div>
-            <div class="kpi-sub kpi-sub-green">Across 6 departments</div>
-          </div>
-          <svg class="kpi-sparkline" viewBox="0 0 80 32" fill="none">
-            <polyline points="0,24 14,20 28,22 42,14 56,10 70,8 80,6" stroke="#52b788" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-            <circle cx="80" cy="6" r="3" fill="#52b788"/>
-          </svg>
+        <div class="stat-card orange">
+          <div class="stat-label">Today's OPD</div>
+          <div class="stat-value">127</div>
+          <div class="stat-sub">↑ 12% vs yesterday</div>
+          <div class="stat-icon">🏥</div>
         </div>
-        <div class="kpi-card kpi-blue">
-          <div class="kpi-icon-wrap kpi-icon-blue">👥</div>
-          <div class="kpi-body">
-            <div class="kpi-label">Staff Accounts</div>
-            <div class="kpi-value">14</div>
-            <div class="kpi-sub kpi-sub-blue">3 roles · All active</div>
-          </div>
-          <svg class="kpi-sparkline" viewBox="0 0 80 32" fill="none">
-            <polyline points="0,28 14,22 28,24 42,18 56,20 70,14 80,12" stroke="#4361ee" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-            <circle cx="80" cy="12" r="3" fill="#4361ee"/>
-          </svg>
-        </div>
-        <div class="kpi-card kpi-orange">
-          <div class="kpi-icon-wrap kpi-icon-orange">🏥</div>
-          <div class="kpi-body">
-            <div class="kpi-label">Today's OPD</div>
-            <div class="kpi-value">127</div>
-            <div class="kpi-sub kpi-sub-orange">↑ 12% vs yesterday</div>
-          </div>
-          <svg class="kpi-sparkline" viewBox="0 0 80 32" fill="none">
-            <polyline points="0,30 14,22 28,18 42,20 56,12 70,6 80,4" stroke="#f4a261" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-            <circle cx="80" cy="4" r="3" fill="#f4a261"/>
-          </svg>
-        </div>
-        <div class="kpi-card kpi-red">
-          <div class="kpi-icon-wrap kpi-icon-red">🏢</div>
-          <div class="kpi-body">
-            <div class="kpi-label">Departments</div>
-            <div class="kpi-value">6</div>
-            <div class="kpi-sub kpi-sub-red">All operational</div>
-          </div>
-          <svg class="kpi-sparkline" viewBox="0 0 80 32" fill="none">
-            <polyline points="0,20 20,20 40,20 60,20 80,20" stroke="#e63946" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-            <circle cx="80" cy="20" r="3" fill="#e63946"/>
-          </svg>
-        </div>
-        <div class="kpi-card kpi-purple">
-          <div class="kpi-icon-wrap kpi-icon-purple">⏱️</div>
-          <div class="kpi-body">
-            <div class="kpi-label">Avg Wait Time</div>
-            <div class="kpi-value">18m</div>
-            <div class="kpi-sub kpi-sub-purple">↓ 3 min improved</div>
-          </div>
-          <svg class="kpi-sparkline" viewBox="0 0 80 32" fill="none">
-            <polyline points="0,6 14,10 28,8 42,14 56,12 70,18 80,20" stroke="#7b2d8b" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
-            <circle cx="80" cy="20" r="3" fill="#7b2d8b"/>
-          </svg>
+        <div class="stat-card red">
+          <div class="stat-label">Departments</div>
+          <div class="stat-value">6</div>
+          <div class="stat-sub">All operational</div>
+          <div class="stat-icon">🏢</div>
         </div>
       </div>
 
-      <!-- Main charts row -->
-      <div class="dash-charts-row">
-
-        <!-- Weekly OPD SVG Bar Chart -->
-        <div class="panel dash-chart-main">
+      <div class="analytics-grid">
+        <div class="panel">
           <div class="panel-header">
             <h3>📊 Weekly OPD Overview</h3>
-            <div style="display:flex;gap:10px;align-items:center;">
-              <span class="legend-pill" style="background:#d8f3dc;color:#2d6a4f;">● Weekday</span>
-              <span class="legend-pill" style="background:#e3f2fd;color:#1565c0;">● Weekend</span>
-              <span class="legend-pill" style="background:#fff3e0;color:#e65100;">● Peak</span>
-            </div>
+            <div class="breadcrumb"><span>This Week</span></div>
           </div>
           <div class="panel-body">
-            <div class="opd-chart-wrap">
-              <svg id="opd-svg" viewBox="0 0 560 220" width="100%" height="220" style="overflow:visible;">
-                <!-- Grid lines -->
-                <line x1="50" y1="10" x2="50" y2="175" stroke="var(--gray-200)" stroke-width="1"/>
-                <line x1="50" y1="10" x2="540" y2="10" stroke="var(--gray-200)" stroke-dasharray="4,4" stroke-width="1"/>
-                <line x1="50" y1="52" x2="540" y2="52" stroke="var(--gray-200)" stroke-dasharray="4,4" stroke-width="1"/>
-                <line x1="50" y1="94" x2="540" y2="94" stroke="var(--gray-200)" stroke-dasharray="4,4" stroke-width="1"/>
-                <line x1="50" y1="136" x2="540" y2="136" stroke="var(--gray-200)" stroke-dasharray="4,4" stroke-width="1"/>
-                <line x1="50" y1="175" x2="540" y2="175" stroke="var(--gray-300)" stroke-width="1.5"/>
-                <!-- Y axis labels -->
-                <text x="42" y="14" text-anchor="end" fill="var(--gray-400)" font-size="9" font-weight="600">130</text>
-                <text x="42" y="56" text-anchor="end" fill="var(--gray-400)" font-size="9" font-weight="600">100</text>
-                <text x="42" y="98" text-anchor="end" fill="var(--gray-400)" font-size="9" font-weight="600">70</text>
-                <text x="42" y="140" text-anchor="end" fill="var(--gray-400)" font-size="9" font-weight="600">40</text>
-                <text x="42" y="179" text-anchor="end" fill="var(--gray-400)" font-size="9" font-weight="600">0</text>
-                <!-- Area fill under line -->
-                <defs>
-                  <linearGradient id="areaGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stop-color="#52b788" stop-opacity="0.22"/>
-                    <stop offset="100%" stop-color="#52b788" stop-opacity="0.01"/>
-                  </linearGradient>
-                  <linearGradient id="barGradG" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stop-color="#52b788"/>
-                    <stop offset="100%" stop-color="#2d6a4f"/>
-                  </linearGradient>
-                  <linearGradient id="barGradO" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stop-color="#ffb347"/>
-                    <stop offset="100%" stop-color="#f4a261"/>
-                  </linearGradient>
-                  <linearGradient id="barGradB" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stop-color="#7aa4f5"/>
-                    <stop offset="100%" stop-color="#4361ee"/>
-                  </linearGradient>
-                  <!-- Bar shadow filter -->
-                  <filter id="barShadow" x="-20%" y="-20%" width="140%" height="140%">
-                    <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="rgba(0,0,0,0.12)"/>
-                  </filter>
-                </defs>
-                <!-- Bars: Mon=78, Tue=95, Wed=112, Thu=88, Fri=127(peak), Sat=64, Sun=42 -->
-                <!-- Mon -->
-                <rect x="72" y="115.7" width="44" height="59.3" rx="6" fill="url(#barGradG)" filter="url(#barShadow)" class="opd-bar" data-val="78" data-day="Monday"/>
-                <text x="94" y="111" text-anchor="middle" fill="var(--gray-600)" font-size="10" font-weight="700">78</text>
-                <text x="94" y="192" text-anchor="middle" fill="var(--gray-500)" font-size="10" font-weight="600">Mon</text>
-                <!-- Tue -->
-                <rect x="140" y="93.5" width="44" height="81.5" rx="6" fill="url(#barGradG)" filter="url(#barShadow)" class="opd-bar" data-val="95" data-day="Tuesday"/>
-                <text x="162" y="89" text-anchor="middle" fill="var(--gray-600)" font-size="10" font-weight="700">95</text>
-                <text x="162" y="192" text-anchor="middle" fill="var(--gray-500)" font-size="10" font-weight="600">Tue</text>
-                <!-- Wed -->
-                <rect x="208" y="73.5" width="44" height="101.5" rx="6" fill="url(#barGradG)" filter="url(#barShadow)" class="opd-bar" data-val="112" data-day="Wednesday"/>
-                <text x="230" y="69" text-anchor="middle" fill="var(--gray-600)" font-size="10" font-weight="700">112</text>
-                <text x="230" y="192" text-anchor="middle" fill="var(--gray-500)" font-size="10" font-weight="600">Wed</text>
-                <!-- Thu -->
-                <rect x="276" y="101" width="44" height="74" rx="6" fill="url(#barGradG)" filter="url(#barShadow)" class="opd-bar" data-val="88" data-day="Thursday"/>
-                <text x="298" y="97" text-anchor="middle" fill="var(--gray-600)" font-size="10" font-weight="700">88</text>
-                <text x="298" y="192" text-anchor="middle" fill="var(--gray-500)" font-size="10" font-weight="600">Thu</text>
-                <!-- Fri (peak) - orange glow -->
-                <rect x="344" y="57" width="44" height="118" rx="6" fill="url(#barGradO)" filter="url(#barShadow)" class="opd-bar opd-bar-peak" data-val="127" data-day="Friday (Peak)"/>
-                <text x="366" y="52" text-anchor="middle" fill="#e65100" font-size="10" font-weight="800">127 🔥</text>
-                <text x="366" y="192" text-anchor="middle" fill="#e65100" font-size="10" font-weight="700">Fri</text>
-                <!-- Sat -->
-                <rect x="412" y="126" width="44" height="49" rx="6" fill="url(#barGradB)" filter="url(#barShadow)" class="opd-bar" data-val="64" data-day="Saturday"/>
-                <text x="434" y="122" text-anchor="middle" fill="var(--gray-500)" font-size="10" font-weight="700">64</text>
-                <text x="434" y="192" text-anchor="middle" fill="var(--gray-500)" font-size="10" font-weight="600">Sat</text>
-                <!-- Sun -->
-                <rect x="480" y="143" width="44" height="32" rx="6" fill="url(#barGradB)" filter="url(#barShadow)" class="opd-bar" data-val="42" data-day="Sunday"/>
-                <text x="502" y="139" text-anchor="middle" fill="var(--gray-500)" font-size="10" font-weight="700">42</text>
-                <text x="502" y="192" text-anchor="middle" fill="var(--gray-500)" font-size="10" font-weight="600">Sun</text>
-                <!-- Trend line -->
-                <polyline points="94,113 162,91 230,71 298,99 366,55 434,124 502,141" fill="none" stroke="#2d6a4f" stroke-width="2" stroke-dasharray="5,3" stroke-linecap="round" stroke-linejoin="round" opacity="0.45"/>
-              </svg>
-              <div class="opd-chart-footer">
-                <div class="opd-summary-pill"><span>📅 Week Total:</span> <strong>606 patients</strong></div>
-                <div class="opd-summary-pill"><span>📈 Avg / Day:</span> <strong>86.6</strong></div>
-                <div class="opd-summary-pill"><span>🔥 Peak:</span> <strong>Friday · 127</strong></div>
+            <div class="chart-placeholder">
+              <div class="chart-title">PATIENTS / DAY</div>
+              <div class="bar-group">
+                <div class="bar-wrap"><div class="bar-val">78</div><div class="bar" style="height:60%"></div><div class="bar-label">Mon</div></div>
+                <div class="bar-wrap"><div class="bar-val">95</div><div class="bar" style="height:73%"></div><div class="bar-label">Tue</div></div>
+                <div class="bar-wrap"><div class="bar-val">112</div><div class="bar" style="height:86%"></div><div class="bar-label">Wed</div></div>
+                <div class="bar-wrap"><div class="bar-val">88</div><div class="bar" style="height:68%"></div><div class="bar-label">Thu</div></div>
+                <div class="bar-wrap"><div class="bar-val">127</div><div class="bar orange" style="height:98%"></div><div class="bar-label">Fri</div></div>
+                <div class="bar-wrap"><div class="bar-val">64</div><div class="bar blue" style="height:49%"></div><div class="bar-label">Sat</div></div>
+                <div class="bar-wrap"><div class="bar-val">42</div><div class="bar blue" style="height:32%"></div><div class="bar-label">Sun</div></div>
               </div>
             </div>
           </div>
         </div>
 
-        <!-- Right column: dept load + donut -->
-        <div class="dash-right-col">
-
-          <!-- Dept load panel -->
-          <div class="panel" style="margin-bottom:16px;">
-            <div class="panel-header"><h3>📋 Dept. Load Today</h3><span class="badge badge-green" style="margin-left:auto;">127 total</span></div>
-            <div class="panel-body" style="padding:16px 20px;">
-              <div style="display:flex;flex-direction:column;gap:13px;">
-                <div class="dept-load-row">\
-                  <span class="dept-load-dot" style="background:#3a8c64;"></span>
-                  <span class="dept-load-name">General OPD</span>
-                  <div class="dept-load-bar-wrap"><div class="dept-load-bar" style="width:84%;background:linear-gradient(90deg,#52b788,#3a8c64);"></div></div>
-                  <span class="dept-load-num" style="color:#3a8c64;">42</span>
-                </div>
-                <div class="dept-load-row">
-                  <span class="dept-load-dot" style="background:#4361ee;"></span>
-                  <span class="dept-load-name">Cardiology</span>
-                  <div class="dept-load-bar-wrap"><div class="dept-load-bar" style="width:56%;background:linear-gradient(90deg,#7aa4f5,#4361ee);"></div></div>
-                  <span class="dept-load-num" style="color:#4361ee;">28</span>
-                </div>
-                <div class="dept-load-row">
-                  <span class="dept-load-dot" style="background:#f4a261;"></span>
-                  <span class="dept-load-name">Pediatrics</span>
-                  <div class="dept-load-bar-wrap"><div class="dept-load-bar" style="width:42%;background:linear-gradient(90deg,#ffb347,#f4a261);"></div></div>
-                  <span class="dept-load-num" style="color:#f4a261;">21</span>
-                </div>
-                <div class="dept-load-row">
-                  <span class="dept-load-dot" style="background:#7b2d8b;"></span>
-                  <span class="dept-load-name">Orthopaedics</span>
-                  <div class="dept-load-bar-wrap"><div class="dept-load-bar" style="width:34%;background:linear-gradient(90deg,#bf7fcc,#7b2d8b);"></div></div>
-                  <span class="dept-load-num" style="color:#7b2d8b;">17</span>
-                </div>
-                <div class="dept-load-row">
-                  <span class="dept-load-dot" style="background:#e63946;"></span>
-                  <span class="dept-load-name">Neurology</span>
-                  <div class="dept-load-bar-wrap"><div class="dept-load-bar" style="width:22%;background:linear-gradient(90deg,#ff7c85,#e63946);"></div></div>
-                  <span class="dept-load-num" style="color:#e63946;">11</span>
-                </div>
-                <div class="dept-load-row">
-                  <span class="dept-load-dot" style="background:#e9c46a;"></span>
-                  <span class="dept-load-name">Dermatology</span>
-                  <div class="dept-load-bar-wrap"><div class="dept-load-bar" style="width:16%;background:linear-gradient(90deg,#f5d98a,#e9c46a);"></div></div>
-                  <span class="dept-load-num" style="color:#b8960a;">8</span>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Patient mix donut -->
-          <div class="panel">
-            <div class="panel-header"><h3>🩺 Patient Mix</h3></div>
-            <div class="panel-body">
-              <div class="donut-wrap">
-                <svg viewBox="0 0 120 120" width="110" height="110" style="flex-shrink:0;">
-                  <circle cx="60" cy="60" r="46" fill="none" stroke="var(--gray-100)" stroke-width="18"/>
-                  <!-- Walk-in 52% -->
-                  <circle cx="60" cy="60" r="46" fill="none" stroke="#52b788" stroke-width="18" stroke-dasharray="150.5 289" stroke-dashoffset="0" transform="rotate(-90 60 60)"/>
-                  <!-- Appointment 33% -->
-                  <circle cx="60" cy="60" r="46" fill="none" stroke="#4361ee" stroke-width="18" stroke-dasharray="95.4 289" stroke-dashoffset="-150.5" transform="rotate(-90 60 60)"/>
-                  <!-- Referral 15% -->
-                  <circle cx="60" cy="60" r="46" fill="none" stroke="#f4a261" stroke-width="18" stroke-dasharray="43.4 289" stroke-dashoffset="-245.9" transform="rotate(-90 60 60)"/>
-                  <text x="60" y="56" text-anchor="middle" fill="var(--gray-700)" font-size="13" font-weight="800">127</text>
-                  <text x="60" y="70" text-anchor="middle" fill="var(--gray-400)" font-size="8" font-weight="600">PATIENTS</text>
-                </svg>
-                <div class="donut-legend">
-                  <div class="legend-item"><span class="legend-dot" style="background:#52b788;"></span><span>Walk-in <strong style="color:var(--gray-700);">52%</strong></span></div>
-                  <div class="legend-item"><span class="legend-dot" style="background:#4361ee;"></span><span>Appointment <strong style="color:var(--gray-700);">33%</strong></span></div>
-                  <div class="legend-item"><span class="legend-dot" style="background:#f4a261;"></span><span>Referral <strong style="color:var(--gray-700);">15%</strong></span></div>
-                </div>
-              </div>
+        <div class="panel">
+          <div class="panel-header"><h3>📋 Dept. Load Today</h3></div>
+          <div class="panel-body">
+            <div style="display:flex;flex-direction:column;gap:12px;">
+              <div><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px;"><span style="color:var(--gray-700);font-weight:600;">General OPD</span><span style="color:var(--green-main);font-weight:700;">42</span></div><div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:84%"></div></div></div>
+              <div><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px;"><span style="color:var(--gray-700);font-weight:600;">Cardiology</span><span style="color:var(--green-main);font-weight:700;">28</span></div><div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:56%;background:var(--accent-blue)"></div></div></div>
+              <div><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px;"><span style="color:var(--gray-700);font-weight:600;">Pediatrics</span><span style="color:var(--green-main);font-weight:700;">21</span></div><div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:42%;background:var(--accent-orange)"></div></div></div>
+              <div><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px;"><span style="color:var(--gray-700);font-weight:600;">Orthopaedics</span><span style="color:var(--green-main);font-weight:700;">17</span></div><div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:34%;background:var(--accent-purple)"></div></div></div>
+              <div><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px;"><span style="color:var(--gray-700);font-weight:600;">Neurology</span><span style="color:var(--green-main);font-weight:700;">11</span></div><div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:22%;background:var(--accent-red)"></div></div></div>
+              <div><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px;"><span style="color:var(--gray-700);font-weight:600;">Dermatology</span><span style="color:var(--green-main);font-weight:700;">8</span></div><div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:16%;background:var(--accent-gold)"></div></div></div>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Bottom row: Quick Metrics + Activity Feed + Doctor Status -->
-      <div class="dash-bottom-row">
-
-        <!-- Quick Metrics enhanced -->
-        <div class="panel">
-          <div class="panel-header"><h3>📌 Quick Metrics</h3><span class="badge badge-green">This Week</span></div>
-          <div class="panel-body" style="padding:0;">
-            <div class="qm-grid">
-              <div class="qm-cell">
-                <div class="qm-icon" style="background:#d8f3dc;color:#2d6a4f;">⏱</div>
-                <div class="qm-label">Avg Wait Time</div>
-                <div class="qm-value">18 <span class="qm-unit">min</span></div>
-                <div class="qm-trend trend-up">↓ 3 min · improving</div>
-              </div>
-              <div class="qm-cell" style="border-left:1px solid var(--gray-100);">
-                <div class="qm-icon" style="background:#ffeaea;color:#e63946;">🚫</div>
-                <div class="qm-label">No-Show Rate</div>
-                <div class="qm-value">7.4 <span class="qm-unit">%</span></div>
-                <div class="qm-trend trend-down">↑ 1.2% · watch</div>
-              </div>
-              <div class="qm-cell" style="border-left:1px solid var(--gray-100);">
-                <div class="qm-icon" style="background:#fff3e0;color:#e65100;">❌</div>
-                <div class="qm-label">Cancellation</div>
-                <div class="qm-value">5.1 <span class="qm-unit">%</span></div>
-                <div class="qm-trend trend-up">↓ 0.8% · good</div>
-              </div>
-              <div class="qm-cell" style="border-left:1px solid var(--gray-100);">
-                <div class="qm-icon" style="background:#e3f2fd;color:#1565c0;">📅</div>
-                <div class="qm-label">Busiest Day</div>
-                <div class="qm-value" style="font-size:18px;">Fri</div>
-                <div class="qm-trend" style="color:var(--gray-500);">Peak · 10–12 AM</div>
-              </div>
+      <div class="panel">
+        <div class="panel-header"><h3>📌 Quick Metrics</h3></div>
+        <div class="panel-body">
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:0;">
+            <div class="metric-row" style="flex-direction:column;align-items:flex-start;padding:14px 20px;">
+              <div class="metric-label">Avg. Waiting Time</div>
+              <div class="metric-value" style="font-size:22px;margin:4px 0;">18 min</div>
+              <div class="metric-trend trend-up">↓ 3 min from last week</div>
             </div>
-          </div>
-        </div>
-
-        <!-- Doctor on-duty status -->
-        <div class="panel">
-          <div class="panel-header"><h3>🩺 Doctors on Duty</h3><button class="btn btn-outline btn-sm" onclick="setNav(document.querySelector('.nav-item:nth-child(6)'), 'doctors')">View All</button></div>
-          <div class="panel-body" style="padding:12px 16px;display:flex;flex-direction:column;gap:10px;">
-            <div class="duty-row"><div class="duty-avatar av-1">SK</div><div class="duty-info"><div class="duty-name">Dr. S. Kumar</div><div class="duty-dept">General OPD</div></div><span class="duty-badge duty-on">● On Duty</span><span class="duty-queue">42 in queue</span></div>
-            <div class="duty-row"><div class="duty-avatar av-2">PM</div><div class="duty-info"><div class="duty-name">Dr. P. Mehta</div><div class="duty-dept">Cardiology</div></div><span class="duty-badge duty-on">● On Duty</span><span class="duty-queue">28 in queue</span></div>
-            <div class="duty-row"><div class="duty-avatar av-4">RA</div><div class="duty-info"><div class="duty-name">Dr. R. Agarwal</div><div class="duty-dept">Pediatrics</div></div><span class="duty-badge duty-on">● On Duty</span><span class="duty-queue">21 in queue</span></div>
-            <div class="duty-row"><div class="duty-avatar av-3">NS</div><div class="duty-info"><div class="duty-name">Dr. N. Singh</div><div class="duty-dept">Orthopaedics</div></div><span class="duty-badge duty-break">● On Break</span><span class="duty-queue" style="color:var(--gray-400);">17 waiting</span></div>
-            <div class="duty-row"><div class="duty-avatar av-6">VR</div><div class="duty-info"><div class="duty-name">Dr. V. Rao</div><div class="duty-dept">Neurology</div></div><span class="duty-badge duty-off">● Off Today</span><span class="duty-queue" style="color:var(--gray-400);">Covered</span></div>
-          </div>
-        </div>
-
-        <!-- Activity feed -->
-        <div class="panel">
-          <div class="panel-header"><h3>🔔 Recent Activity</h3><span class="badge badge-orange">Live</span></div>
-          <div class="panel-body" style="padding:12px 16px;display:flex;flex-direction:column;gap:0;">
-            <div class="activity-item">
-              <div class="activity-dot" style="background:#52b788;"></div>
-              <div class="activity-body">
-                <div class="activity-text">Token #127 issued — <strong>General OPD</strong></div>
-                <div class="activity-time">2 min ago</div>
-              </div>
+            <div class="metric-row" style="flex-direction:column;align-items:flex-start;padding:14px 20px;border-left:1px solid var(--gray-100);">
+              <div class="metric-label">No-Show Rate</div>
+              <div class="metric-value" style="font-size:22px;margin:4px 0;">7.4%</div>
+              <div class="metric-trend trend-down">↑ 1.2% from last week</div>
             </div>
-            <div class="activity-item">
-              <div class="activity-dot" style="background:#4361ee;"></div>
-              <div class="activity-body">
-                <div class="activity-text">New appointment — <strong>Cardiology</strong> · 3:00 PM</div>
-                <div class="activity-time">8 min ago</div>
-              </div>
+            <div class="metric-row" style="flex-direction:column;align-items:flex-start;padding:14px 20px;border-left:1px solid var(--gray-100);">
+              <div class="metric-label">Cancellation Rate</div>
+              <div class="metric-value" style="font-size:22px;margin:4px 0;">5.1%</div>
+              <div class="metric-trend trend-up">↓ 0.8% from last week</div>
             </div>
-            <div class="activity-item">
-              <div class="activity-dot" style="background:#e63946;"></div>
-              <div class="activity-body">
-                <div class="activity-text">Cancellation — <strong>Dr. N. Singh</strong> · slot freed</div>
-                <div class="activity-time">15 min ago</div>
-              </div>
-            </div>
-            <div class="activity-item">
-              <div class="activity-dot" style="background:#f4a261;"></div>
-              <div class="activity-body">
-                <div class="activity-text">Walk-in checked in — <strong>Pediatrics</strong></div>
-                <div class="activity-time">22 min ago</div>
-              </div>
-            </div>
-            <div class="activity-item">
-              <div class="activity-dot" style="background:#7b2d8b;"></div>
-              <div class="activity-body">
-                <div class="activity-text">Staff login — <strong>Receptionist A. Sharma</strong></div>
-                <div class="activity-time">31 min ago</div>
-              </div>
-            </div>
-            <div class="activity-item" style="border:none;">
-              <div class="activity-dot" style="background:#e9c46a;"></div>
-              <div class="activity-body">
-                <div class="activity-text">Holiday added — <strong>Eid al-Adha</strong> · Jun 28</div>
-                <div class="activity-time">1 hr ago</div>
-              </div>
+            <div class="metric-row" style="flex-direction:column;align-items:flex-start;padding:14px 20px;border-left:1px solid var(--gray-100);">
+              <div class="metric-label">Busiest Day</div>
+              <div class="metric-value" style="font-size:22px;margin:4px 0;">Friday</div>
+              <div class="metric-trend" style="color:var(--gray-500);">Peak: 10–12 AM</div>
             </div>
           </div>
         </div>
       </div>
-
     </div>
 
     <!--  HOSPITAL PROFILE  -->
@@ -1398,7 +967,7 @@
       </div>
     </div>
 
-    <!--  DEPARTMENTS  -->
+    <!-- DEPARTMENTS -->
     <div id="view-departments" class="view">
       <div class="section-header">
         <div class="section-title">🏢 Departments</div>
@@ -1409,7 +978,7 @@
       </div>
     </div>
 
-    <!--  DOCTORS  -->
+    <!--DOCTORS -->
     <div id="view-doctors" class="view">
       <div class="section-header">
         <div class="section-title">👨‍⚕️ Doctors</div>
@@ -1439,7 +1008,7 @@
       </div>
     </div>
 
-    <!--  HOLIDAYS  -->
+    <!--  HOLIDAYS -->
     <div id="view-holidays" class="view">
       <div class="section-header">
         <div class="section-title">📅 Holidays & Closures</div>
@@ -1454,7 +1023,7 @@
       </div>
     </div>
 
-    <!-- STAFF  -->
+    <!--  STAFF  -->
     <div id="view-staff" class="view">
       <div class="section-header">
         <div class="section-title">👥 Staff Accounts</div>
@@ -1501,7 +1070,7 @@
       </div>
     </div>
 
-    <!--  ROLES  -->
+    <!-- ROLES  -->
     <div id="view-roles" class="view">
       <div class="section-header">
         <div class="section-title">🔐 Roles & Access Control</div>
@@ -1511,7 +1080,7 @@
       </div>
     </div>
 
-    <!--  ANALYTICS -->
+    <!--  ANALYTICS  -->
     <div id="view-analytics" class="view">
       <div class="section-header">
         <div class="section-title">📈 Reports & Analytics</div>
@@ -1587,7 +1156,7 @@
       </div>
     </div>
 
-    <!-- HEATMAP  -->
+    <!--  HEATMAP  -->
     <div id="view-heatmap" class="view">
       <div class="section-header">
         <div class="section-title">🌡️ Busiest Days & Hours Heatmap</div>
@@ -1616,7 +1185,7 @@
   </div><!-- /content -->
 </div><!-- /main -->
 
-<!--  MODALS -->
+<!-- MODALS  -->
 
 <!-- Hospital Profile Modal -->
 <div class="modal-overlay" id="modal-hospital">
@@ -1987,7 +1556,7 @@ function saveDept() {
   clearForm(['dept-name','dept-icon','dept-floor','dept-head','dept-desc']);
 }
 
-/*  DOCTORS */
+/* DOCTORS  */
 function renderDoctors(filter='') {
   const g = document.getElementById('doctor-grid');
   const list = filter ? doctors.filter(d => d.name.toLowerCase().includes(filter) || d.spec.toLowerCase().includes(filter) || d.dept.toLowerCase().includes(filter)) : doctors;
@@ -2074,7 +1643,7 @@ function selectAvColor(el, cls) {
   el.style.border = '3px solid var(--green-main)';
 }
 
-/*  TIME SLOTS  */
+/*  TIME SLOTS */
 function populateSlotDoctors() {
   const sel = document.getElementById('slot-doctor-select');
   sel.innerHTML = '<option value="">-- Choose Doctor --</option>' +
@@ -2157,7 +1726,7 @@ function saveEmergency() {
   closeModal('modal-emergency');
 }
 
-/* STAFF */
+/*  STAFF  */
 function renderStaff(filter='') {
   const tbody = document.getElementById('staff-tbody');
   const list = filter ? staffList.filter(s => s.name.toLowerCase().includes(filter) || s.email.toLowerCase().includes(filter)) : staffList;
@@ -2304,7 +1873,7 @@ function renderHeatmap() {
   `;
 }
 
-/* HOSPITAL PROFILE */
+/*  HOSPITAL PROFILE */
 function saveHospitalProfile() {
   document.getElementById('hp-name-display').textContent = document.getElementById('hp-name').value;
   document.getElementById('hp-addr-display').innerHTML = '📍 ' + document.getElementById('hp-addr').value;
@@ -2316,7 +1885,7 @@ function saveHospitalProfile() {
   showToast('Hospital profile updated ✅');
 }
 
-/*  CONFIRM DELETE */
+/*  CONFIRM DELETE  */
 function confirmDelete(type, id, label) {
   document.getElementById('confirm-msg').textContent = `Are you sure you want to delete this ${label}? This action cannot be undone.`;
   document.getElementById('confirm-yes-btn').onclick = () => {
@@ -2330,7 +1899,7 @@ function confirmDelete(type, id, label) {
   openModal('modal-confirm');
 }
 
-/* EXPORT */
+/*  EXPORT  */
 function exportReport(type) {
   showToast(`📥 Exporting report as ${type.toUpperCase()}...`,'warning');
   setTimeout(() => showToast(`✅ ${type.toUpperCase()} report downloaded successfully`), 1500);
@@ -2342,21 +1911,21 @@ function roleBadge(role) {
 }
 function initials(name) {
   return name.split(' ').filter(Boolean).map(w=>w[0]).join('').slice(0,2).toUpperCase();
-}Z
+}
 function formatDate(d) {
   const dt = new Date(d);
   return dt.toLocaleDateString('en-IN',{day:'2-digit',month:'short'});
 }
 function clearForm(ids) { ids.forEach(id => { const el = document.getElementById(id); if(el) el.value=''; }); }
 
-/*  MODAL HELPERS  */
+/*  MODAL HELPERS */
 function openModal(id) { document.getElementById(id).classList.add('open'); }
 function closeModal(id) { document.getElementById(id).classList.remove('open'); }
 document.querySelectorAll('.modal-overlay').forEach(m => {
   m.addEventListener('click', e => { if(e.target===m) m.classList.remove('open'); });
 });
 
-/* TOAST */
+/*  TOAST */
 function showToast(msg, type='success') {
   const c = document.getElementById('toast-container');
   const t = document.createElement('div');
@@ -2366,7 +1935,7 @@ function showToast(msg, type='success') {
   setTimeout(() => { t.classList.add('removing'); setTimeout(() => t.remove(), 260); }, 3500);
 }
 
-/*  THEME  */
+/*  THEME */
 function toggleTheme() {
   const isDark = document.documentElement.classList.toggle('dark-mode');
   localStorage.setItem('careflow-admin-theme', isDark?'dark':'light');
@@ -2379,27 +1948,19 @@ function initTheme() {
   if (isDark) { document.documentElement.classList.add('dark-mode'); document.getElementById('theme-toggle').textContent='☀️'; }
 }
 
-/*  DATE ═ */
+/*  DATE  */
 function setDate() {
   const d = new Date();
   document.getElementById('today-date').innerHTML = `<strong>${d.toLocaleDateString('en-US',{weekday:'short',month:'short',day:'numeric',year:'numeric'})}</strong>`;
 }
 
-/*  INIT  */
+/* INIT  */
 setDate();
 initTheme();
 renderDepts();
 renderDoctors();
 renderStaff();
 renderHolidays();
-
-// Dynamic greeting
-(function() {
-  const h = new Date().getHours();
-  const g = h < 12 ? 'Good morning' : h < 17 ? 'Good afternoon' : 'Good evening';
-  const el = document.getElementById('dash-greeting');
-  if (el) el.textContent = g;
-})();
 </script>
 </body>
 </html>
