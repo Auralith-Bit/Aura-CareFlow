@@ -1043,7 +1043,8 @@
         </div>
       </div>
 
-      <div class="analytics-grid">
+<!-- Weekly OPD SVG Bar Chart 
+     <div class="analytics-grid">
         <div class="panel">
           <div class="panel-header">
             <h3>📊 Weekly OPD Overview</h3>
@@ -1063,22 +1064,137 @@
               </div>
             </div>
           </div>
-        </div>
+        </div>   -->
 
-        <div class="panel">
-          <div class="panel-header"><h3>📋 Dept. Load Today</h3></div>
-          <div class="panel-body">
-            <div style="display:flex;flex-direction:column;gap:12px;">
-              <div><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px;"><span style="color:var(--gray-700);font-weight:600;">General OPD</span><span style="color:var(--green-main);font-weight:700;">42</span></div><div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:84%"></div></div></div>
-              <div><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px;"><span style="color:var(--gray-700);font-weight:600;">Cardiology</span><span style="color:var(--green-main);font-weight:700;">28</span></div><div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:56%;background:var(--accent-blue)"></div></div></div>
-              <div><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px;"><span style="color:var(--gray-700);font-weight:600;">Pediatrics</span><span style="color:var(--green-main);font-weight:700;">21</span></div><div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:42%;background:var(--accent-orange)"></div></div></div>
-              <div><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px;"><span style="color:var(--gray-700);font-weight:600;">Orthopaedics</span><span style="color:var(--green-main);font-weight:700;">17</span></div><div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:34%;background:var(--accent-purple)"></div></div></div>
-              <div><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px;"><span style="color:var(--gray-700);font-weight:600;">Neurology</span><span style="color:var(--green-main);font-weight:700;">11</span></div><div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:22%;background:var(--accent-red)"></div></div></div>
-              <div><div style="display:flex;justify-content:space-between;font-size:12px;margin-bottom:4px;"><span style="color:var(--gray-700);font-weight:600;">Dermatology</span><span style="color:var(--green-main);font-weight:700;">8</span></div><div class="progress-bar-wrap"><div class="progress-bar-fill" style="width:16%;background:var(--accent-gold)"></div></div></div>
-            </div>
-          </div>
+        <div style="display: flex !important; flex-direction: row !important; gap: 20px !important; width: 100% !important; align-items: stretch !important; flex-wrap: nowrap !important;">
+  
+  <div class="panel dash-chart-main" style="flex: 0 0 60% !important; min-width: 0 !important; margin: 0 !important;">
+    <div class="panel-header">
+      <h3>📊 Weekly OPD Overview</h3>
+      <div style="display:flex; gap:10px; align-items:center;">
+        <span class="legend-pill" style="background:#d8f3dc; color:#2d6a4f; padding: 4px 8px; border-radius: 12px; font-size: 11px; font-weight: 600;">● Weekday</span>
+        <span class="legend-pill" style="background:#e3f2fd; color:#1565c0; padding: 4px 8px; border-radius: 12px; font-size: 11px; font-weight: 600;">● Weekend</span>
+        <span class="legend-pill" style="background:#fff3e0; color:#e65100; padding: 4px 8px; border-radius: 12px; font-size: 11px; font-weight: 600;">● Peak</span>
+      </div>
+    </div>
+    <div class="panel-body">
+      <div class="opd-chart-wrap" style="position: relative; width: 100%;">
+        <svg id="opd-svg" viewBox="0 0 560 220" width="100%" height="220" style="overflow:visible;">
+          <line x1="50" y1="10" x2="50" y2="175" stroke="var(--gray-200)" stroke-width="1"/>
+          <line x1="50" y1="10" x2="540" y2="10" stroke="var(--gray-200)" stroke-dasharray="4,4" stroke-width="1"/>
+          <line x1="50" y1="52" x2="540" y2="52" stroke="var(--gray-200)" stroke-dasharray="4,4" stroke-width="1"/>
+          <line x1="50" y1="94" x2="540" y2="94" stroke="var(--gray-200)" stroke-dasharray="4,4" stroke-width="1"/>
+          <line x1="50" y1="136" x2="540" y2="136" stroke="var(--gray-200)" stroke-dasharray="4,4" stroke-width="1"/>
+          <line x1="50" y1="175" x2="540" y2="175" stroke="var(--gray-300)" stroke-width="1.5"/>
+          
+          <text x="42" y="14" text-anchor="end" fill="var(--gray-400)" font-size="9" font-weight="600">130</text>
+          <text x="42" y="56" text-anchor="end" fill="var(--gray-400)" font-size="9" font-weight="600">100</text>
+          <text x="42" y="98" text-anchor="end" fill="var(--gray-400)" font-size="9" font-weight="600">70</text>
+          <text x="42" y="140" text-anchor="end" fill="var(--gray-400)" font-size="9" font-weight="600">40</text>
+          <text x="42" y="179" text-anchor="end" fill="var(--gray-400)" font-size="9" font-weight="600">0</text>
+          
+          <defs>
+            <linearGradient id="barGradG" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#52b788"/><stop offset="100%" stop-color="#2d6a4f"/></linearGradient>
+            <linearGradient id="barGradO" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#ffb347"/><stop offset="100%" stop-color="#f4a261"/></linearGradient>
+            <linearGradient id="barGradB" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#7aa4f5"/><stop offset="100%" stop-color="#4361ee"/></linearGradient>
+            <filter id="barShadow" x="-20%" y="-20%" width="140%" height="140%"><feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="rgba(0,0,0,0.12)"/></filter>
+          </defs>
+          
+          <rect x="72" y="115.7" width="44" height="59.3" rx="6" fill="url(#barGradG)" filter="url(#barShadow)" class="opd-bar"/>
+          <text x="94" y="111" text-anchor="middle" fill="var(--gray-600)" font-size="10" font-weight="700">78</text>
+          <text x="94" y="192" text-anchor="middle" fill="var(--gray-500)" font-size="10" font-weight="600">Mon</text>
+          
+          <rect x="140" y="93.5" width="44" height="81.5" rx="6" fill="url(#barGradG)" filter="url(#barShadow)" class="opd-bar"/>
+          <text x="162" y="89" text-anchor="middle" fill="var(--gray-600)" font-size="10" font-weight="700">95</text>
+          <text x="162" y="192" text-anchor="middle" fill="var(--gray-500)" font-size="10" font-weight="600">Tue</text>
+          
+          <rect x="208" y="73.5" width="44" height="101.5" rx="6" fill="url(#barGradG)" filter="url(#barShadow)" class="opd-bar"/>
+          <text x="230" y="69" text-anchor="middle" fill="var(--gray-600)" font-size="10" font-weight="700">112</text>
+          <text x="230" y="192" text-anchor="middle" fill="var(--gray-500)" font-size="10" font-weight="600">Wed</text>
+          
+          <rect x="276" y="101" width="44" height="74" rx="6" fill="url(#barGradG)" filter="url(#barShadow)" class="opd-bar"/>
+          <text x="298" y="97" text-anchor="middle" fill="var(--gray-600)" font-size="10" font-weight="700">88</text>
+          <text x="298" y="192" text-anchor="middle" fill="var(--gray-500)" font-size="10" font-weight="600">Thu</text>
+          
+          <rect x="344" y="57" width="44" height="118" rx="6" fill="url(#barGradO)" filter="url(#barShadow)" class="opd-bar opd-bar-peak"/>
+          <text x="366" y="52" text-anchor="middle" fill="#e65100" font-size="10" font-weight="800">127 🔥</text>
+          <text x="366" y="192" text-anchor="middle" fill="#e65100" font-size="10" font-weight="700">Fri</text>
+          
+          <rect x="412" y="126" width="44" height="49" rx="6" fill="url(#barGradB)" filter="url(#barShadow)" class="opd-bar"/>
+          <text x="434" y="122" text-anchor="middle" fill="var(--gray-500)" font-size="10" font-weight="700">64</text>
+          <text x="434" y="192" text-anchor="middle" fill="var(--gray-500)" font-size="10" font-weight="600">Sat</text>
+          
+          <rect x="480" y="143" width="44" height="32" rx="6" fill="url(#barGradB)" filter="url(#barShadow)" class="opd-bar"/>
+          <text x="502" y="139" text-anchor="middle" fill="var(--gray-500)" font-size="10" font-weight="700">42</text>
+          <text x="502" y="192" text-anchor="middle" fill="var(--gray-500)" font-size="10" font-weight="600">Sun</text>
+          
+          <polyline points="94,113 162,91 230,71 298,99 366,55 434,124 502,141" fill="none" stroke="#2d6a4f" stroke-width="2" stroke-dasharray="5,3" stroke-linecap="round" stroke-linejoin="round" opacity="0.45"/>
+        </svg>
+        
+        <div class="opd-chart-footer" style="display:flex; justify-content:space-around; gap:10px; margin-top:16px; padding-top:14px; border-top:1px solid var(--gray-200); flex-wrap:wrap;">
+          <div class="opd-summary-pill" style="font-size:12px; color:var(--gray-600); background:var(--gray-100); padding:6px 12px; border-radius:6px;"><span>📅 Week Total:</span> <strong>606 patients</strong></div>
+          <div class="opd-summary-pill" style="font-size:12px; color:var(--gray-600); background:var(--gray-100); padding:6px 12px; border-radius:6px;"><span>📈 Avg / Day:</span> <strong>86.6</strong></div>
+          <div class="opd-summary-pill" style="font-size:12px; color:var(--gray-600); background:var(--gray-100); padding:6px 12px; border-radius:6px;"><span>🔥 Peak:</span> <strong>Friday · 127</strong></div>
         </div>
       </div>
+    </div>
+  </div>
+
+  <div class="panel" style="flex: 0 0 40% !important; min-width: 0 !important; margin: 0 !important;">
+    <div class="panel-header">
+      <h3>📋 Dept. Load Today</h3>
+    </div>
+    <div class="panel-body">
+      
+      <div style="margin-bottom: 12px;">
+        <div style="display:flex; justify-content:space-between; font-size:13px; margin-bottom:4px;">
+          <span>General OPD</span><strong>42</strong>
+        </div>
+        <div style="background:var(--gray-100); height:8px; border-radius:4px; overflow:hidden;">
+          <div style="background:#52b788; height:100%; width:80%;"></div>
+        </div>
+      </div>
+      
+      <div style="margin-bottom: 12px;">
+        <div style="display:flex; justify-content:space-between; font-size:13px; margin-bottom:4px;">
+          <span>Cardiology</span><strong>28</strong>
+        </div>
+        <div style="background:var(--gray-100); height:8px; border-radius:4px; overflow:hidden;">
+          <div style="background:#4361ee; height:100%; width:55%;"></div>
+        </div>
+      </div>
+
+      <div style="margin-bottom: 12px;">
+        <div style="display:flex; justify-content:space-between; font-size:13px; margin-bottom:4px;">
+          <span>Neurology</span><strong>21</strong>
+        </div>
+        <div style="background:var(--gray-100); height:8px; border-radius:4px; overflow:hidden;">
+          <div style="background:#f4a261; height:100%; width:40%;"></div>
+        </div>
+      </div>
+
+      <div style="margin-bottom: 12px;">
+        <div style="display:flex; justify-content:space-between; font-size:13px; margin-bottom:4px;">
+          <span>Orthopaedics</span><strong>17</strong>      
+        </div>
+        <div style="background:var(--gray-100); height:8px; border-radius:4px; overflow:hidden;">
+          <div style="background:#7209b7; height:100%; width:34%;"></div>
+        </div>
+      </div>
+
+      <div style="margin-bottom: 12px;">
+        <div style="display:flex; justify-content:space-between; font-size:13px; margin-bottom:4px;">
+          <span>Dermatology</span><strong>8</strong>
+        </div>
+        <div style="background:var(--gray-100); height:8px; border-radius:4px; overflow:hidden;">
+          <div style="background:#e63946; height:100%; width:16%;"></div>
+        </div>
+      </div>
+      </div>
+      </div>
+
+      </div>
+
 
       <div class="analytics-grid">
         <div class="panel">
@@ -1947,7 +2063,7 @@ function renderSlotConfig() {
       <button class="btn btn-outline" onclick="showToast('Slots reset to default','warning')">↺ Reset to Default</button>
     </div>
   `;
-}
+} 
 
 function toggleSlot(el) {
   if (el.classList.contains('booked')) return;
@@ -2203,6 +2319,7 @@ function toggleTheme() {
   localStorage.setItem('careflow-admin-theme', isDark?'dark':'light');
   document.getElementById('theme-toggle').textContent = isDark?'☀️':'🌙';
 }
+
 function initTheme() {
   const saved = localStorage.getItem('careflow-admin-theme');
   const pref = window.matchMedia('(prefers-color-scheme: dark)').matches;
